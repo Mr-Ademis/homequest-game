@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Домашний Квест - Исследование Duolingo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        h1 {
+            color: #2575fc;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .stats {
+            background: #f0f8ff;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            text-align: center;
+            border: 2px dashed #2575fc;
+        }
+        
+        .points {
+            font-size: 42px;
+            font-weight: bold;
+            color: #2575fc;
+            margin: 10px 0;
+        }
+        
+        .streak {
+            font-size: 18px;
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+        
+        .tasks {
+            margin-bottom: 25px;
+        }
+        
+        .task {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 5px solid #2575fc;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .task:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(37, 117, 252, 0.2);
+        }
+        
+        .task.done {
+            background: #e8f5e9;
+            border-left-color: #4caf50;
+            opacity: 0.7;
+        }
+        
+        .task-name {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .task-points {
+            background: #2575fc;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        .task.done .task-points {
+            background: #4caf50;
+        }
+        
+        .rewards {
+            background: #fff9e6;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 2px solid #ffd166;
+        }
+        
+        .reward {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #2575fc 0%, #6a11cb 100%);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(37, 117, 252, 0.4);
+        }
+        
+        .qr-section {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 25px;
+            color: white;
+            font-size: 14px;
+        }
+        
+        /* Анимации */
+        @keyframes celebrate {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .celebrate {
+            animation: celebrate 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏠 Домашний Квест</h1>
+            <p class="subtitle">Исследование геймификации на примере Duolingo</p>
+        </div>
+        
+        <div class="stats">
+            <div>Ваши баллы:</div>
+            <div id="totalPoints" class="points">0</div>
+            <div class="streak">🔥 Серия: <span id="streakDays">0</span> дней</div>
+        </div>
+        
+        <div class="tasks">
+            <h2 style="margin-bottom: 15px; color: #333;">Задания на сегодня:</h2>
+            
+            <div class="task" onclick="completeTask(10, 'Заправить кровать')">
+                <div class="task-name">🛏️ Заправить кровать</div>
+                <div class="task-points">+10</div>
+            </div>
+            
+            <div class="task" onclick="completeTask(20, 'Пропылесосить')">
+                <div class="task-name">🧹 Пропылесосить</div>
+                <div class="task-points">+20</div>
+            </div>
+            
+            <div class="task" onclick="completeTask(15, 'Полить цветы')">
+                <div class="task-name">🌿 Полить цветы</div>
+                <div class="task-points">+15</div>
+            </div>
+            
+            <div class="task" onclick="completeTask(10, 'Сложить игрушки')">
+                <div class="task-name">🧸 Сложить игрушки</div>
+                <div class="task-points">+10</div>
+            </div>
+            
+            <div class="task" onclick="completeTask(15, 'Вынести мусор')">
+                <div class="task-name">🗑️ Вынести мусор</div>
+                <div class="task-points">+15</div>
+            </div>
+        </div>
+        
+        <button onclick="resetProgress()">🔄 Сбросить прогресс</button>
+        
+        <div class="rewards">
+            <h3 style="color: #e85d04; margin-bottom: 15px;">🎁 Доступные награды:</h3>
+            <div class="reward">
+                <span>🍿 Вечер кино</span>
+                <span style="color: #e85d04; font-weight: bold;">50 баллов</span>
+            </div>
+            <div class="reward">
+                <span>🎮 +30 мин игры</span>
+                <span style="color: #e85d04; font-weight: bold;">30 баллов</span>
+            </div>
+            <div class="reward">
+                <span>🍦 Любимый десерт</span>
+                <span style="color: #e85d04; font-weight: bold;">40 баллов</span>
+            </div>
+            <div class="reward">
+                <span>🎪 Поход в парк</span>
+                <span style="color: #e85d04; font-weight: bold;">100 баллов</span>
+            </div>
+        </div>
+        
+        <div class="qr-section">
+            <h3>📱 Отсканируйте для работы:</h3>
+            <p style="margin: 10px 0; color: #666;">Используйте камеру телефона</p>
+            <!-- Здесь будет QR-код -->
+            <div id="qrCode" style="margin: 20px auto; width: 200px; height: 200px; background: #eee; display: flex; align-items: center; justify-content: center; border-radius: 10px;">
+                <div style="text-align: center;">
+                    <div style="font-size: 48px;">📱</div>
+                    <div>QR-код появится<br>при запуске на сервере</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        Научно-исследовательская работа<br>
+        «Учеба в игре: Секреты Duolingo»
+    </div>
+
+    <script>
+        // Данные приложения
+        let totalPoints = localStorage.getItem('homeQuestPoints') ? 
+                         parseInt(localStorage.getItem('homeQuestPoints')) : 0;
+        let streakDays = localStorage.getItem('homeQuestStreak') ? 
+                        parseInt(localStorage.getItem('homeQuestStreak')) : 0;
+        let today = new Date().toDateString();
+        let lastVisit = localStorage.getItem('homeQuestLastVisit');
+        
+        // Инициализация
+        function init() {
+            updateDisplay();
+            
+            // Проверка серии (как в Duolingo)
+            if (lastVisit !== today) {
+                if (lastVisit) {
+                    const lastDate = new Date(lastVisit);
+                    const todayDate = new Date(today);
+                    const diffTime = Math.abs(todayDate - lastDate);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    
+                    if (diffDays === 1) {
+                        streakDays++;
+                        showNotification('🔥 Серия продолжается! ' + streakDays + ' дней подряд!');
+                    } else if (diffDays > 1) {
+                        streakDays = 1;
+                        showNotification('💔 Серия прервана! Начинаем заново.');
+                    }
+                } else {
+                    streakDays = 1;
+                }
+                
+                localStorage.setItem('homeQuestStreak', streakDays);
+                localStorage.setItem('homeQuestLastVisit', today);
+            }
+            
+            // Генерация QR-кода
+            generateQRCode();
+        }
+        
+        // Выполнение задания
+        function completeTask(points, taskName) {
+            totalPoints += points;
+            localStorage.setItem('homeQuestPoints', totalPoints);
+            
+            // Анимация
+            const pointsElement = document.getElementById('totalPoints');
+            pointsElement.classList.remove('celebrate');
+            void pointsElement.offsetWidth; // Перезапуск анимации
+            pointsElement.classList.add('celebrate');
+            
+            // Отметка задания выполненным
+            event.currentTarget.classList.add('done');
+            event.currentTarget.style.pointerEvents = 'none';
+            
+            // Уведомление (как в Duolingo)
+            showNotification(`✅ ${taskName} выполнено! +${points} баллов\nВсего: ${totalPoints}`);
+            
+            // Проверка наград
+            checkRewards();
+            
+            updateDisplay();
+        }
+        
+        // Проверка доступных наград
+        function checkRewards() {
+            const rewards = [
+                {points: 30, name: "🎮 +30 мин игры", message: "Можешь играть дополнительно 30 минут!"},
+                {points: 50, name: "🍿 Вечер кино", message: "Выбирай фильм на семейный вечер!"},
+                {points: 100, name: "🎪 Поход в парк", message: "Выходные в парке! Покажи родителям это сообщение."}
+            ];
+            
+            rewards.forEach(reward => {
+                if (totalPoints >= reward.points && 
+                    !localStorage.getItem(`reward_${reward.points}_claimed`)) {
+                    
+                    showNotification(`🎉 Доступна награда: ${reward.name}\n${reward.message}`);
+                    localStorage.setItem(`reward_${reward.points}_claimed`, 'true');
+                }
+            });
+        }
+        
+        // Сброс прогресса
+        function resetProgress() {
+            if (confirm("Точно сбросить весь прогресс? Это нельзя отменить!")) {
+                totalPoints = 0;
+                streakDays = 0;
+                localStorage.removeItem('homeQuestPoints');
+                localStorage.removeItem('homeQuestStreak');
+                localStorage.removeItem('homeQuestLastVisit');
+                
+                // Сбрасываем выполненные задания
+                document.querySelectorAll('.task').forEach(task => {
+                    task.classList.remove('done');
+                    task.style.pointerEvents = 'auto';
+                });
+                
+                updateDisplay();
+                showNotification("🔄 Прогресс сброшен! Начинаем заново!");
+            }
+        }
+        
+        // Обновление отображения
+        function updateDisplay() {
+            document.getElementById('totalPoints').textContent = totalPoints;
+            document.getElementById('streakDays').textContent = streakDays;
+        }
+        
+        // Уведомления (имитация Duolingo)
+        function showNotification(message) {
+            // Создаем уведомление
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: white;
+                color: #333;
+                padding: 15px 20px;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                z-index: 1000;
+                max-width: 300px;
+                border-left: 5px solid #4CAF50;
+                animation: slideIn 0.5s ease;
+            `;
+            
+            // Добавляем стиль анимации
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            notification.innerHTML = `
+                <div style="font-weight: bold; margin-bottom: 5px;">🏆 Duolingo-стиль</div>
+                <div>${message.replace(/\n/g, '<br>')}</div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Автоудаление через 3 секунды
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.5s ease';
+                notification.style.opacity = '0';
+                setTimeout(() => notification.remove(), 500);
+            }, 3000);
+        }
+        
+        // Генерация QR-кода
+        function generateQRCode() {
+            const currentUrl = window.location.href;
+            const qrContainer = document.getElementById('qrCode');
+            
+            if (currentUrl.startsWith('http')) {
+                // Если открыто через сервер, показываем реальный QR
+                qrContainer.innerHTML = `
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(currentUrl)}" 
+                         alt="QR Code"
+                         style="width: 200px; height: 200px; border-radius: 10px;">
+                    <p style="font-size: 12px; margin-top: 10px; color: #666;">Отсканируйте для быстрого доступа</p>
+                `;
+            }
+        }
+        
+        // Имитация ежедневной серии Duolingo
+        function showDailyReminder() {
+            const now = new Date();
+            const hour = now.getHours();
+            
+            // Напоминание вечером (как в Duolingo)
+            if (hour >= 18 && hour <= 21 && !localStorage.getItem('dailyReminderShown')) {
+                setTimeout(() => {
+                    showNotification("🦉 Не забудь про задания! Твоя серия: " + streakDays + " дней");
+                    localStorage.setItem('dailyReminderShown', 'true');
+                }, 5000);
+            }
+        }
+        
+        // Запуск при загрузке
+        window.onload = function() {
+            init();
+            showDailyReminder();
+            
+            // Скрываем уведомление при клике
+            document.addEventListener('click', function() {
+                const notifications = document.querySelectorAll('[style*="position: fixed"]');
+                notifications.forEach(n => n.remove());
+            });
+        };
+    </script>
+</body>
+</html>
