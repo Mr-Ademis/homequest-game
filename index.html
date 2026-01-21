@@ -116,15 +116,17 @@
             cursor: pointer;
         }
         
-        .task:hover {
+        .task:not(.done):hover {
             transform: translateX(5px);
             box-shadow: 0 5px 15px rgba(37, 117, 252, 0.2);
         }
         
         .task.done {
             background: #e8f5e9;
-            border-left-color: #4caf50;
+            border-left-color: #4CAF50;
             opacity: 0.7;
+            cursor: default;
+            pointer-events: none;
         }
         
         .task-name {
@@ -141,7 +143,7 @@
         }
         
         .task.done .task-points {
-            background: #4caf50;
+            background: #4CAF50;
         }
         
         .rewards {
@@ -293,7 +295,7 @@
     <div class="container">
         <div class="header">
             <h1>🏠 Домашний Квест</h1>
-            <p class="subtitle">Исследование геймификации</p>
+            <p class="subtitle">Исследование геймификации на примере Duolingo</p>
         </div>
         
         <div class="stats">
@@ -445,7 +447,6 @@
         
         // ==================== СИСТЕМА СТАТИСТИКИ ====================
         
-        // Структура данных статистики
         const defaultStats = {
             totalTasksCompleted: 0,
             totalPointsEarned: 0,
@@ -471,7 +472,6 @@
             dailyStats: {}
         };
         
-        // Инициализация статистики
         function initStats() {
             let stats = JSON.parse(localStorage.getItem('homeQuestStats'));
             if (!stats) {
@@ -483,85 +483,68 @@
             return stats;
         }
         
-        // Обновление статистики при выполнении задания
         function updateStats(taskName, points) {
             let stats = JSON.parse(localStorage.getItem('homeQuestStats'));
             if (!stats) stats = initStats();
             
-            // Обновляем общую статистику
             stats.totalTasksCompleted += 1;
             stats.totalPointsEarned += points;
             
-            // Обновляем статистику по конкретному заданию
             if (stats.tasksCompleted[taskName] !== undefined) {
                 stats.tasksCompleted[taskName] += 1;
             }
             
-            // Обновляем максимальную серию
             const currentStreak = parseInt(localStorage.getItem('homeQuestStreak')) || 0;
             if (currentStreak > stats.maxStreak) {
                 stats.maxStreak = currentStreak;
             }
             
-            // Обновляем дату последней активности
             const today = new Date().toISOString().split('T')[0];
             stats.lastUpdateDate = today;
             
-            // Обновляем ежедневную статистику
             if (!stats.dailyStats[today]) {
                 stats.dailyStats[today] = { tasks: 0, points: 0 };
-                // Увеличиваем счетчик активных дней
                 const uniqueDays = new Set(Object.keys(stats.dailyStats));
                 stats.totalDaysActive = uniqueDays.size;
             }
             stats.dailyStats[today].tasks += 1;
             stats.dailyStats[today].points += points;
             
-            // Проверяем достижения
             checkAchievements(stats);
-            
-            // Сохраняем обновленную статистику
             localStorage.setItem('homeQuestStats', JSON.stringify(stats));
             
             return stats;
         }
         
-        // Проверка достижений
         function checkAchievements(stats) {
             const achievements = stats.achievements;
             
-            // Первое задание
             if (stats.totalTasksCompleted >= 1 && !achievements.firstTask) {
                 achievements.firstTask = true;
                 showNotification('🏆 Новое достижение: Первые шаги!\nВыполнено первое задание!');
             }
             
-            // Серия из 3 дней
             const currentStreak = parseInt(localStorage.getItem('homeQuestStreak')) || 0;
             if (currentStreak >= 3 && !achievements.streak3) {
                 achievements.streak3 = true;
                 showNotification('🔥 Новое достижение: Постоянство!\n3 дня подряд!');
             }
             
-            // Серия из 7 дней
             if (currentStreak >= 7 && !achievements.streak7) {
                 achievements.streak7 = true;
                 showNotification('🌟 Новое достижение: Неделя силы воли!\n7 дней подряд!');
             }
             
-            // 100 баллов
             if (stats.totalPointsEarned >= 100 && !achievements.points100) {
                 achievements.points100 = true;
                 showNotification('💰 Новое достижение: Сотня!\nНакоплено 100 баллов!');
             }
             
-            // 500 баллов
             if (stats.totalPointsEarned >= 500 && !achievements.points500) {
                 achievements.points500 = true;
                 showNotification('💎 Новое достижение: Балльный магнат!\nНакоплено 500 баллов!');
             }
             
-            // Все задания выполнены хотя бы по разу
             const allTasksDone = Object.values(stats.tasksCompleted).every(count => count > 0);
             if (allTasksDone && !achievements.allTasks) {
                 achievements.allTasks = true;
@@ -569,11 +552,9 @@
             }
         }
         
-        // Отображение статистики
         function renderStatistics() {
             const stats = JSON.parse(localStorage.getItem('homeQuestStats')) || initStats();
             
-            // Сводка
             const summary = `
                 <div style="margin-bottom: 5px;">Всего заданий: <strong>${stats.totalTasksCompleted}</strong></div>
                 <div style="margin-bottom: 5px;">Всего баллов: <strong>${stats.totalPointsEarned}</strong></div>
@@ -582,7 +563,6 @@
             `;
             document.getElementById('statsSummary').innerHTML = summary;
             
-            // Статистика по заданиям
             let taskStatsHTML = '';
             const tasks = Object.entries(stats.tasksCompleted);
             const maxTasks = Math.max(...Object.values(stats.tasksCompleted)) || 1;
@@ -601,7 +581,6 @@
             });
             document.getElementById('taskStats').innerHTML = taskStatsHTML;
             
-            // Дополнительная статистика
             const avgTasksPerDay = (stats.totalTasksCompleted / stats.totalDaysActive).toFixed(1);
             const avgPointsPerDay = (stats.totalPointsEarned / stats.totalDaysActive).toFixed(1);
             const mostFrequentTask = Object.entries(stats.tasksCompleted)
@@ -626,14 +605,10 @@
                 </div>
             `;
             
-            // Обновляем общее количество заданий в хедере
             document.getElementById('totalTasksDisplay').textContent = `Всего заданий: ${stats.totalTasksCompleted}`;
-            
-            // Обновляем достижения
             renderAchievements(stats);
         }
         
-        // Отображение достижений
         function renderAchievements(stats) {
             const achievements = stats.achievements;
             let achievementsHTML = '';
@@ -666,7 +641,6 @@
             document.getElementById('achievementsList').innerHTML = achievementsHTML;
         }
         
-        // Экспорт статистики
         function exportStats() {
             const stats = JSON.parse(localStorage.getItem('homeQuestStats')) || initStats();
             const dataStr = JSON.stringify(stats, null, 2);
@@ -684,7 +658,6 @@
         
         // ==================== ОСНОВНОЙ КОД ПРИЛОЖЕНИЯ ====================
         
-        // Данные приложения
         let totalPoints = localStorage.getItem('homeQuestPoints') ? 
                          parseInt(localStorage.getItem('homeQuestPoints')) : 0;
         let streakDays = localStorage.getItem('homeQuestStreak') ? 
@@ -695,7 +668,7 @@
         
         // Инициализация при загрузке
         function init() {
-            initStats(); // Инициализируем статистику
+            initStats();
             updateDisplay();
             
             // Проверка серии (как в Duolingo)
@@ -733,11 +706,10 @@
             renderStatistics();
         }
         
-        // Выполнение задания
+        // Выполнение задания - УПРОЩЕННАЯ ВЕРСИЯ
         function completeTask(points, taskName, element) {
-            // Проверяем, не выполнено ли уже это задание сегодня
+            // Если уже выполнено - просто выходим (на всякий случай)
             if (completedTasksToday.includes(taskName)) {
-                showNotification('✅ Это задание уже выполнено сегодня!');
                 return;
             }
             
@@ -754,41 +726,72 @@
             // Анимация
             const pointsElement = document.getElementById('totalPoints');
             pointsElement.classList.remove('celebrate');
-            void pointsElement.offsetWidth; // Перезапуск анимации
+            void pointsElement.offsetWidth;
             pointsElement.classList.add('celebrate');
             
-            // Отметка задания выполненным
+            // Сразу делаем задание неактивным
             element.classList.add('done');
             element.style.pointerEvents = 'none';
+            element.style.cursor = 'default';
             
-            // Уведомление (как в Duolingo) - 25 секунд
+            // Меняем текст кнопки
+            const pointsBtn = element.querySelector('.task-points');
+            pointsBtn.textContent = '✓ Выполнено';
+            pointsBtn.style.background = '#4CAF50';
+            
+            // Уведомление о выполнении
             showNotification(`✅ ${taskName} выполнено!\n+${points} ${formatPoints(points).split(' ')[1]}\nВсего: ${formatPoints(totalPoints)}`);
             
             // Проверка наград
             checkRewards();
             
             updateDisplay();
-            renderStatistics(); // Обновляем статистику
+            renderStatistics();
         }
         
-        // Отметить уже выполненные задания
+        // Отметить уже выполненные задания (при загрузке)
         function markCompletedTasks() {
             const tasks = document.querySelectorAll('.task');
             tasks.forEach(task => {
-                const taskName = task.querySelector('.task-name').textContent.replace(/[^\w\s]/g, '').trim();
+                const taskName = task.querySelector('.task-name').textContent
+                    .replace(/[^\w\s]/g, '').trim();
+                
                 if (completedTasksToday.includes(taskName)) {
+                    // Сразу делаем неактивными
                     task.classList.add('done');
                     task.style.pointerEvents = 'none';
+                    task.style.cursor = 'default';
+                    
+                    // Меняем текст кнопки
+                    const points = task.querySelector('.task-points');
+                    points.textContent = '✓ Выполнено';
+                    points.style.background = '#4CAF50';
                 }
             });
         }
         
-        // Сброс кнопок заданий
+        // Сброс кнопок заданий (при новом дне)
         function resetTaskButtons() {
             const tasks = document.querySelectorAll('.task');
             tasks.forEach(task => {
                 task.classList.remove('done');
                 task.style.pointerEvents = 'auto';
+                task.style.cursor = 'pointer';
+                
+                // Возвращаем исходный текст
+                const taskName = task.querySelector('.task-name').textContent;
+                const points = task.querySelector('.task-points');
+                
+                // Определяем количество баллов по названию задания
+                if (taskName.includes('Заправить кровать') || taskName.includes('Сложить игрушки')) {
+                    points.textContent = '+10';
+                } else if (taskName.includes('Пропылесосить')) {
+                    points.textContent = '+20';
+                } else if (taskName.includes('Полить цветы') || taskName.includes('Вынести мусор')) {
+                    points.textContent = '+15';
+                }
+                
+                points.style.background = '#2575fc';
             });
         }
         
@@ -826,15 +829,15 @@
                 
                 // Сбрасываем награды
                 [30, 50, 100].forEach(points => {
-                    localStorage.removeItem(`reward_${reward.points}_claimed`);
+                    localStorage.removeItem(`reward_${points}_claimed`);
                 });
                 
                 // Сбрасываем выполненные задания
                 resetTaskButtons();
                 
                 updateDisplay();
-                initStats(); // Создаем новую статистику
-                renderStatistics(); // Обновляем отображение статистики
+                initStats();
+                renderStatistics();
                 showNotification("🔄 Весь прогресс сброшен! Начинаем заново!");
             }
         }
@@ -847,15 +850,12 @@
         
         // Переключение экранов
         function showScreen(screenId) {
-            // Скрываем все экраны
             document.querySelectorAll('.screen').forEach(screen => {
                 screen.classList.remove('active');
             });
             
-            // Показываем выбранный экран
             document.getElementById(screenId + 'Screen').classList.add('active');
             
-            // Если показываем статистику - обновляем её
             if (screenId === 'statistics') {
                 renderStatistics();
             }
@@ -863,18 +863,15 @@
         
         // Уведомления (имитация Duolingo) - 25 СЕКУНД!
         function showNotification(message) {
-            // Удаляем старые уведомления
             const oldNotifications = document.querySelectorAll('.notification');
             oldNotifications.forEach(n => n.remove());
             
-            // Создаем новое уведомление
             const notification = document.createElement('div');
             notification.className = 'notification';
             
-            // Добавляем кнопку закрытия и прогресс-бар
             notification.innerHTML = `
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
-                    <div style="font-weight: bold; color: #2575fc; font-size: 16px;">🏆</div>
+                    <div style="font-weight: bold; color: #2575fc; font-size: 16px;">🏆 Duolingo-стиль</div>
                     <button onclick="this.parentNode.parentNode.remove()" 
                             style="background: rgba(0,0,0,0.1); border: none; color: #666; cursor: pointer; font-size: 16px; 
                                    width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
@@ -895,7 +892,6 @@
             
             document.body.appendChild(notification);
             
-            // Автоудаление через 25 секунд
             setTimeout(() => {
                 if (notification.parentNode) {
                     notification.style.animation = 'slideOut 0.5s ease';
@@ -907,7 +903,6 @@
                 }
             }, 25000);
             
-            // Звук успеха
             playSuccessSound();
         }
         
@@ -936,7 +931,6 @@
         window.onload = function() {
             init();
             
-            // Обновляем текущую дату
             setInterval(() => {
                 const newToday = new Date().toISOString().split('T')[0];
                 if (newToday !== today) {
