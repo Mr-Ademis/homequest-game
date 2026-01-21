@@ -289,6 +289,22 @@
             from { width: 100%; }
             to { width: 0%; }
         }
+        
+        /* Анимация для достижений */
+        @keyframes achievementPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .achievement-notification {
+            border-left: 5px solid #FFD700;
+            background: linear-gradient(to right, #fff9e6, #ffffff);
+        }
+        
+        .achievement-notification .notification-icon {
+            animation: achievementPulse 0.5s ease 3;
+        }
     </style>
 </head>
 <body>
@@ -517,38 +533,41 @@
         
         function checkAchievements(stats) {
             const achievements = stats.achievements;
+            let newAchievements = [];
             
             if (stats.totalTasksCompleted >= 1 && !achievements.firstTask) {
                 achievements.firstTask = true;
-                showNotification('🏆 Новое достижение: Первые шаги!\nВыполнено первое задание!');
+                showAchievementNotification('🚀', 'Первые шаги', 'Выполнено первое задание!');
             }
             
             const currentStreak = parseInt(localStorage.getItem('homeQuestStreak')) || 0;
             if (currentStreak >= 3 && !achievements.streak3) {
                 achievements.streak3 = true;
-                showNotification('🔥 Новое достижение: Постоянство!\n3 дня подряд!');
+                showAchievementNotification('🔥', 'Постоянство', '3 дня подряд!');
             }
             
             if (currentStreak >= 7 && !achievements.streak7) {
                 achievements.streak7 = true;
-                showNotification('🌟 Новое достижение: Неделя силы воли!\n7 дней подряд!');
+                showAchievementNotification('🌟', 'Неделя силы воли', '7 дней подряд!');
             }
             
             if (stats.totalPointsEarned >= 100 && !achievements.points100) {
                 achievements.points100 = true;
-                showNotification('💰 Новое достижение: Сотня!\nНакоплено 100 баллов!');
+                showAchievementNotification('💰', 'Сотня', 'Накоплено 100 баллов!');
             }
             
             if (stats.totalPointsEarned >= 500 && !achievements.points500) {
                 achievements.points500 = true;
-                showNotification('💎 Новое достижение: Балльный магнат!\nНакоплено 500 баллов!');
+                showAchievementNotification('💎', 'Балльный магнат', 'Накоплено 500 баллов!');
             }
             
             const allTasksDone = Object.values(stats.tasksCompleted).every(count => count > 0);
             if (allTasksDone && !achievements.allTasks) {
                 achievements.allTasks = true;
-                showNotification('🎯 Новое достижение: Мастер всех дел!\nВсе типы заданий выполнены!');
+                showAchievementNotification('🎯', 'Мастер всех дел', 'Все типы заданий выполнены!');
             }
+            
+            localStorage.setItem('homeQuestStats', JSON.stringify(stats));
         }
         
         function renderStatistics() {
@@ -727,8 +746,12 @@
             completedTasks[today].push(taskName);
             localStorage.setItem('completedTasks', JSON.stringify(completedTasks));
             
+            // Получаем текущую статистику ДО обновления
+            let stats = JSON.parse(localStorage.getItem('homeQuestStats')) || initStats();
+            const wasFirstTask = stats.totalTasksCompleted === 0;
+            
             // Обновляем статистику
-            updateStats(taskName, points);
+            stats = updateStats(taskName, points);
             
             // Анимация
             const pointsElement = document.getElementById('totalPoints');
@@ -739,8 +762,15 @@
             // Помечаем задание как выполненное
             markTaskAsDone(element, taskName);
             
-            // Уведомление о выполнении
+            // Показываем уведомление о выполнении задания
             showNotification(`✅ ${taskName} выполнено!\n+${points} ${formatPoints(points).split(' ')[1]}\nВсего: ${formatPoints(totalPoints)}`);
+            
+            // Если это первое задание - показываем достижение с задержкой
+            if (wasFirstTask) {
+                setTimeout(() => {
+                    showAchievementNotification('🚀', 'Первые шаги', 'Выполнено первое задание!');
+                }, 1000);
+            }
             
             // Проверка наград
             checkRewards();
@@ -756,7 +786,7 @@
             element.style.cursor = 'default';
             
             const pointsBtn = element.querySelector('.task-points');
-            pointsBtn.textContent = '✓Выполнено';
+            pointsBtn.textContent = '✓ Выполнено';
             pointsBtn.style.background = '#4CAF50';
             
             // Сохраняем исходные данные в атрибуты
@@ -883,7 +913,6 @@
             
             notification.innerHTML = `
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
-                    <div style="font-weight: bold; color: #2575fc; font-size: 16px;">🏆</div>
                     <button onclick="this.parentNode.parentNode.remove()" 
                             style="background: rgba(0,0,0,0.1); border: none; color: #666; cursor: pointer; font-size: 16px; 
                                    width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
@@ -918,7 +947,59 @@
             playSuccessSound();
         }
         
-        // Звук успеха
+        // Уведомление о достижении с особенным стилем и звуком
+        function showAchievementNotification(icon, title, message) {
+            const oldNotifications = document.querySelectorAll('.notification');
+            oldNotifications.forEach(n => n.remove());
+            
+            const notification = document.createElement('div');
+            notification.className = 'notification achievement-notification';
+            
+            notification.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                    <div style="display: flex; align-items: center;">
+                        <div style="font-size: 24px; margin-right: 10px;" class="notification-icon">${icon}</div>
+                        <div style="font-weight: bold; color: #e85d04; font-size: 18px;">🏆 Достижение!</div>
+                    </div>
+                    <button onclick="this.parentNode.parentNode.remove()" 
+                            style="background: rgba(0,0,0,0.1); border: none; color: #666; cursor: pointer; font-size: 16px; 
+                                   width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+                                   padding: 0; margin: -5px -5px 0 0; transition: all 0.2s;"
+                            onmouseover="this.style.background='rgba(0,0,0,0.2)'; this.style.color='#333'"
+                            onmouseout="this.style.background='rgba(0,0,0,0.1)'; this.style.color='#666'">
+                        ×
+                    </button>
+                </div>
+                <div style="font-size: 16px; line-height: 1.4; padding-right: 5px;">
+                    <div style="font-weight: bold; color: #2575fc; margin-bottom: 5px;">${title}</div>
+                    <div>${message}</div>
+                </div>
+                <div style="margin-top: 12px; display: flex; align-items: center; font-size: 12px; color: #666;">
+                    <div style="flex-grow: 1; height: 4px; background: #e0e0e0; border-radius: 2px; overflow: hidden; margin-right: 10px;">
+                        <div style="height: 100%; width: 100%; background: linear-gradient(90deg, #FFD700, #FFA500); animation: progressShrink 25s linear forwards;"></div>
+                    </div>
+                    <span>25 сек</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Воспроизводим триумфальный звук для достижений
+            playAchievementSound();
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.style.animation = 'slideOut 0.5s ease';
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.parentNode.removeChild(notification);
+                        }
+                    }, 500);
+                }
+            }, 25000);
+        }
+        
+        // Звук успеха для обычных заданий
         function playSuccessSound() {
             try {
                 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -936,7 +1017,58 @@
                 
                 oscillator.start(audioContext.currentTime);
                 oscillator.stop(audioContext.currentTime + 0.5);
-            } catch (e) {}
+            } catch (e) {
+                console.log("Аудио недоступно");
+            }
+        }
+        
+        // Звук для достижений - более торжественный
+        function playAchievementSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const now = audioContext.currentTime;
+                
+                // Создаем основной тон
+                const oscillator1 = audioContext.createOscillator();
+                const oscillator2 = audioContext.createOscillator();
+                const gainNode1 = audioContext.createGain();
+                const gainNode2 = audioContext.createGain();
+                
+                oscillator1.connect(gainNode1);
+                oscillator2.connect(gainNode2);
+                gainNode1.connect(audioContext.destination);
+                gainNode2.connect(audioContext.destination);
+                
+                // Первый тон - восходящий
+                oscillator1.frequency.setValueAtTime(523.25, now); // До
+                oscillator1.frequency.exponentialRampToValueAtTime(1046.50, now + 0.3); // До на октаву выше
+                oscillator1.type = 'sine';
+                
+                // Второй тон - аккорд
+                oscillator2.frequency.setValueAtTime(659.25, now); // Ми
+                oscillator2.frequency.exponentialRampToValueAtTime(1318.51, now + 0.3); // Ми на октаву выше
+                oscillator2.type = 'sine';
+                
+                // Управление громкостью
+                gainNode1.gain.setValueAtTime(0, now);
+                gainNode1.gain.linearRampToValueAtTime(0.2, now + 0.05);
+                gainNode1.gain.exponentialRampToValueAtTime(0.01, now + 0.8);
+                
+                gainNode2.gain.setValueAtTime(0, now);
+                gainNode2.gain.linearRampToValueAtTime(0.15, now + 0.1);
+                gainNode2.gain.exponentialRampToValueAtTime(0.01, now + 0.8);
+                
+                // Запуск и остановка
+                oscillator1.start(now);
+                oscillator2.start(now);
+                oscillator1.stop(now + 0.8);
+                oscillator2.stop(now + 0.8);
+                
+            } catch (e) {
+                console.log("Аудио для достижений недоступно");
+                // Если не удалось создать сложный звук, используем простой
+                playSuccessSound();
+            }
         }
         
         // Запуск при загрузке
