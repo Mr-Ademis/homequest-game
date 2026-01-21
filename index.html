@@ -66,6 +66,156 @@
             margin-bottom: 5px;
         }
         
+        /* Система уровней */
+        .level-system {
+            margin: 15px 0;
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 165, 0, 0.1));
+            border-radius: 12px;
+            border: 2px solid #FFD700;
+        }
+        
+        .level-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .level-display {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .level-badge {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0 4px 8px rgba(255, 165, 0, 0.3);
+        }
+        
+        .level-text {
+            font-weight: bold;
+            color: #e85d04;
+        }
+        
+        .level-progress-bar {
+            height: 12px;
+            background: #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-top: 10px;
+            position: relative;
+        }
+        
+        .level-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #FFD700, #FFA500);
+            border-radius: 6px;
+            transition: width 0.5s ease;
+        }
+        
+        .level-progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 10px;
+            font-weight: bold;
+            color: #333;
+            text-shadow: 0 0 2px white;
+        }
+        
+        /* Визуальный прогресс дня */
+        .daily-progress {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 20px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(37, 117, 252, 0.1), rgba(106, 17, 203, 0.1));
+            border-radius: 15px;
+            border: 2px solid #2575fc;
+        }
+        
+        .progress-circle-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+        }
+        
+        .progress-circle-bg {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: #e0e0e0;
+            position: absolute;
+        }
+        
+        .progress-circle-fill {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(#4CAF50 0%, #e0e0e0 0%);
+            position: absolute;
+            transition: background 0.5s ease;
+        }
+        
+        .progress-circle-inner {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .progress-percent {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        
+        .progress-label {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .progress-details {
+            flex: 1;
+            margin-left: 20px;
+        }
+        
+        .progress-details h3 {
+            color: #2575fc;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .progress-tasks {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .progress-tasks span {
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        
         .navigation {
             display: flex;
             justify-content: space-between;
@@ -259,6 +409,16 @@
             animation: celebrate 0.5s ease;
         }
         
+        @keyframes levelUp {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+        
+        .level-up {
+            animation: levelUp 0.5s ease;
+        }
+        
         /* Уведомления - 25 секунд */
         .notification {
             position: fixed;
@@ -318,6 +478,48 @@
             <div id="totalPoints" class="points">0</div>
             <div class="streak" id="streakDisplay">🔥 Серия: 0 дней</div>
             <div id="totalTasksDisplay" style="font-size: 16px; color: #666;">Всего заданий: 0</div>
+        </div>
+        
+        <!-- Система уровней -->
+        <div class="level-system">
+            <div class="level-info">
+                <div class="level-display">
+                    <div id="levelBadge" class="level-badge">1</div>
+                    <div class="level-text">
+                        <div>Уровень <span id="currentLevel">1</span></div>
+                        <div style="font-size: 12px; color: #666;">Опыт: <span id="currentXP">0</span>/<span id="nextLevelXP">100</span></div>
+                    </div>
+                </div>
+                <div id="levelReward" style="font-weight: bold; color: #4CAF50;">+10% к баллам</div>
+            </div>
+            <div class="level-progress-bar">
+                <div id="levelProgressFill" class="level-progress-fill" style="width: 0%"></div>
+                <div id="levelProgressText" class="level-progress-text">0%</div>
+            </div>
+        </div>
+        
+        <!-- Визуальный прогресс дня -->
+        <div class="daily-progress">
+            <div class="progress-circle-container">
+                <div class="progress-circle-bg"></div>
+                <div id="progressCircleFill" class="progress-circle-fill"></div>
+                <div class="progress-circle-inner">
+                    <div id="progressPercent" class="progress-percent">0%</div>
+                    <div class="progress-label">прогресс</div>
+                </div>
+            </div>
+            <div class="progress-details">
+                <h3>📅 Прогресс дня</h3>
+                <div class="progress-tasks">
+                    Выполнено: <span id="completedToday">0</span> из <span id="totalTasksToday">5</span> заданий
+                </div>
+                <div class="progress-tasks" style="margin-top: 5px;">
+                    Баллов сегодня: <span id="pointsToday">0</span>
+                </div>
+                <div id="dailyGoalStatus" style="font-size: 12px; color: #4CAF50; margin-top: 8px; font-weight: bold;">
+                    Начните выполнять задания!
+                </div>
+            </div>
         </div>
         
         <div class="navigation">
@@ -389,6 +591,10 @@
                 
                 <h3 style="margin: 25px 0 15px; color: #666;">Дополнительная статистика:</h3>
                 <div id="additionalStats"></div>
+                
+                <!-- Статистика по уровням -->
+                <h3 style="margin: 25px 0 15px; color: #666;">Прогресс по уровням:</h3>
+                <div id="levelStats"></div>
             </div>
             
             <button onclick="exportStats()">📥 Экспорт статистики</button>
@@ -460,7 +666,211 @@
             }
         }
         
-        // ==================== СИСТЕМА СТАТИСТИКИ ====================
+        // ==================== СИСТЕМА УРОВНЕЙ ====================
+        
+        // Система уровней (как в играх)
+        const levelRequirements = [
+            0,      // Уровень 1 (начальный)
+            100,    // Уровень 2
+            250,    // Уровень 3
+            450,    // Уровень 4
+            700,    // Уровень 5
+            1000,   // Уровень 6
+            1350,   // Уровень 7
+            1750,   // Уровень 8
+            2200,   // Уровень 9
+            2700,   // Уровень 10
+            3250,   // Уровень 11
+            3850,   // Уровень 12
+            4500,   // Уровень 13
+            5200,   // Уровень 14
+            5950,   // Уровень 15
+            6750,   // Уровень 16
+            7600,   // Уровень 17
+            8500,   // Уровень 18
+            9450,   // Уровень 19
+            10450   // Уровень 20
+        ];
+        
+        // Бонусы за уровни (увеличивают получаемые баллы)
+        const levelBonuses = {
+            1: 1.0,   // +0%
+            2: 1.1,   // +10%
+            3: 1.15,  // +15%
+            4: 1.2,   // +20%
+            5: 1.25,  // +25%
+            6: 1.3,   // +30%
+            7: 1.35,  // +35%
+            8: 1.4,   // +40%
+            9: 1.45,  // +45%
+            10: 1.5,  // +50%
+            11: 1.6,  // +60%
+            12: 1.7,  // +70%
+            13: 1.8,  // +80%
+            14: 1.9,  // +90%
+            15: 2.0,  // +100%
+            16: 2.1,  // +110%
+            17: 2.2,  // +120%
+            18: 2.3,  // +130%
+            19: 2.4,  // +140%
+            20: 2.5   // +150%
+        };
+        
+        function calculateLevel(totalPoints) {
+            let level = 1;
+            for (let i = levelRequirements.length - 1; i >= 1; i--) {
+                if (totalPoints >= levelRequirements[i]) {
+                    level = i + 1;
+                    break;
+                }
+            }
+            return level;
+        }
+        
+        function calculateXPProgress(totalPoints, level) {
+            const currentLevelXP = levelRequirements[level - 1];
+            const nextLevelXP = levelRequirements[level];
+            const xpInCurrentLevel = totalPoints - currentLevelXP;
+            const xpNeededForNextLevel = nextLevelXP - currentLevelXP;
+            
+            return {
+                currentXP: xpInCurrentLevel,
+                nextLevelXP: xpNeededForNextLevel,
+                percentage: Math.min(100, Math.round((xpInCurrentLevel / xpNeededForNextLevel) * 100))
+            };
+        }
+        
+        function updateLevelDisplay() {
+            const level = calculateLevel(totalPoints);
+            const xpProgress = calculateXPProgress(totalPoints, level);
+            
+            // Обновляем отображение уровня
+            document.getElementById('currentLevel').textContent = level;
+            document.getElementById('levelBadge').textContent = level;
+            document.getElementById('currentXP').textContent = xpProgress.currentXP;
+            document.getElementById('nextLevelXP').textContent = xpProgress.nextLevelXP;
+            
+            // Обновляем прогресс-бар
+            const progressFill = document.getElementById('levelProgressFill');
+            const progressText = document.getElementById('levelProgressText');
+            progressFill.style.width = `${xpProgress.percentage}%`;
+            progressText.textContent = `${xpProgress.percentage}%`;
+            
+            // Обновляем бонус уровня
+            const bonusPercentage = Math.round((levelBonuses[level] - 1) * 100);
+            document.getElementById('levelReward').textContent = `+${bonusPercentage}% к баллам`;
+            
+            // Проверяем, был ли переход на новый уровень
+            const lastLevel = parseInt(localStorage.getItem('lastLevel')) || 1;
+            if (level > lastLevel) {
+                showLevelUpNotification(level, bonusPercentage);
+                localStorage.setItem('lastLevel', level);
+            }
+        }
+        
+        function showLevelUpNotification(newLevel, bonusPercentage) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.style.borderLeftColor = '#FFD700';
+            notification.style.background = 'linear-gradient(to right, #fff9e6, #ffffff)';
+            
+            notification.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                    <div style="display: flex; align-items: center;">
+                        <div style="font-size: 24px; margin-right: 10px; animation: achievementPulse 0.5s ease 3;">⭐</div>
+                        <div style="font-weight: bold; color: #e85d04; font-size: 18px;">🎉 Новый уровень!</div>
+                    </div>
+                    <button onclick="this.parentNode.parentNode.remove()" 
+                            style="background: rgba(0,0,0,0.1); border: none; color: #666; cursor: pointer; font-size: 16px; 
+                                   width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+                                   padding: 0; margin: -5px -5px 0 0; transition: all 0.2s;"
+                            onmouseover="this.style.background='rgba(0,0,0,0.2)'; this.style.color='#333'"
+                            onmouseout="this.style.background='rgba(0,0,0,0.1)'; this.style.color='#666'">
+                        ×
+                    </button>
+                </div>
+                <div style="font-size: 16px; line-height: 1.4; padding-right: 5px;">
+                    <div style="font-weight: bold; color: #2575fc; margin-bottom: 5px; font-size: 20px;">Уровень ${newLevel} достигнут!</div>
+                    <div>Теперь вы получаете <strong>+${bonusPercentage}% баллов</strong> за задания!</div>
+                    <div style="margin-top: 10px; font-size: 14px; color: #666;">Продолжайте в том же духе!</div>
+                </div>
+                <div style="margin-top: 12px; display: flex; align-items: center; font-size: 12px; color: #666;">
+                    <div style="flex-grow: 1; height: 4px; background: #e0e0e0; border-radius: 2px; overflow: hidden; margin-right: 10px;">
+                        <div style="height: 100%; width: 100%; background: linear-gradient(90deg, #FFD700, #FFA500); animation: progressShrink 25s linear forwards;"></div>
+                    </div>
+                    <span>25 сек</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Анимация бейджа уровня
+            const levelBadge = document.getElementById('levelBadge');
+            levelBadge.classList.remove('level-up');
+            void levelBadge.offsetWidth;
+            levelBadge.classList.add('level-up');
+            
+            // Воспроизводим звук уровня
+            playLevelUpSound();
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.style.animation = 'slideOut 0.5s ease';
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.parentNode.removeChild(notification);
+                        }
+                    }, 500);
+                }
+            }, 25000);
+        }
+        
+        // ==================== ОБНОВЛЕНИЕ ПРОГРЕССА ДНЯ ====================
+        
+        function updateDailyProgress() {
+            const todayCompleted = completedTasks[today] || [];
+            const totalTasks = 5; // Всего заданий в день
+            const completedCount = todayCompleted.length;
+            const percentage = Math.round((completedCount / totalTasks) * 100);
+            
+            // Обновляем круговой индикатор
+            const circleFill = document.getElementById('progressCircleFill');
+            circleFill.style.background = `conic-gradient(#4CAF50 ${percentage}%, #e0e0e0 0%)`;
+            
+            // Обновляем текст
+            document.getElementById('progressPercent').textContent = `${percentage}%`;
+            document.getElementById('completedToday').textContent = completedCount;
+            document.getElementById('totalTasksToday').textContent = totalTasks;
+            
+            // Считаем баллы за сегодня
+            let todayPoints = 0;
+            if (completedTasks[today]) {
+                const tasks = document.querySelectorAll('.task');
+                tasks.forEach(task => {
+                    const taskName = task.getAttribute('data-task');
+                    if (todayCompleted.includes(taskName)) {
+                        const points = parseInt(task.getAttribute('data-points')) || 0;
+                        todayPoints += points;
+                    }
+                });
+            }
+            document.getElementById('pointsToday').textContent = todayPoints;
+            
+            // Обновляем статус цели
+            const goalStatus = document.getElementById('dailyGoalStatus');
+            if (completedCount === 0) {
+                goalStatus.textContent = "Начните выполнять задания!";
+                goalStatus.style.color = "#666";
+            } else if (completedCount < totalTasks) {
+                goalStatus.textContent = `Осталось ${totalTasks - completedCount} заданий`;
+                goalStatus.style.color = "#2575fc";
+            } else {
+                goalStatus.textContent = "🎉 Все задания выполнены!";
+                goalStatus.style.color = "#4CAF50";
+            }
+        }
+        
+        // ==================== ИСПРАВЛЕННАЯ СИСТЕМА СТАТИСТИКИ ====================
         
         const defaultStats = {
             totalTasksCompleted: 0,
@@ -484,7 +894,11 @@
                 'points500': false,
                 'allTasks': false
             },
-            dailyStats: {}
+            dailyStats: {},
+            // Статистика по уровням
+            highestLevel: 1,
+            totalXP: 0,
+            levelHistory: []
         };
         
         function initStats() {
@@ -498,12 +912,22 @@
             return stats;
         }
         
-        function updateStats(taskName, points) {
+        // ИСПРАВЛЕНИЕ: Правильное сохранение статистики
+        function saveStats(taskName, points) {
             let stats = JSON.parse(localStorage.getItem('homeQuestStats'));
             if (!stats) stats = initStats();
             
+            // Применяем бонус уровня
+            const level = calculateLevel(totalPoints);
+            const bonusMultiplier = levelBonuses[level];
+            const basePoints = points;
+            const bonusPoints = Math.round(basePoints * (bonusMultiplier - 1));
+            const totalPointsEarned = basePoints + bonusPoints;
+            
+            // ИСПРАВЛЕНИЕ: Обновляем статистику ДО проверки достижений
             stats.totalTasksCompleted += 1;
-            stats.totalPointsEarned += points;
+            stats.totalPointsEarned += totalPointsEarned;
+            stats.totalXP += totalPointsEarned;
             
             if (stats.tasksCompleted[taskName] !== undefined) {
                 stats.tasksCompleted[taskName] += 1;
@@ -512,6 +936,18 @@
             const currentStreak = parseInt(localStorage.getItem('homeQuestStreak')) || 0;
             if (currentStreak > stats.maxStreak) {
                 stats.maxStreak = currentStreak;
+            }
+            
+            // Обновляем максимальный уровень
+            const newLevel = calculateLevel(stats.totalPointsEarned);
+            if (newLevel > stats.highestLevel) {
+                stats.highestLevel = newLevel;
+                // Записываем достижение уровня
+                stats.levelHistory.push({
+                    level: newLevel,
+                    date: new Date().toISOString().split('T')[0],
+                    totalXP: stats.totalXP
+                });
             }
             
             const today = new Date().toISOString().split('T')[0];
@@ -523,51 +959,58 @@
                 stats.totalDaysActive = uniqueDays.size;
             }
             stats.dailyStats[today].tasks += 1;
-            stats.dailyStats[today].points += points;
+            stats.dailyStats[today].points += totalPointsEarned;
             
-            checkAchievements(stats);
+            // ИСПРАВЛЕНИЕ: Сохраняем статистику ДО проверки достижений
             localStorage.setItem('homeQuestStats', JSON.stringify(stats));
+            
+            // Проверяем достижения
+            checkAchievements(stats);
             
             return stats;
         }
         
         function checkAchievements(stats) {
             const achievements = stats.achievements;
-            let newAchievements = [];
             
             if (stats.totalTasksCompleted >= 1 && !achievements.firstTask) {
                 achievements.firstTask = true;
+                // ИСПРАВЛЕНИЕ: Сохраняем сразу после изменения
+                localStorage.setItem('homeQuestStats', JSON.stringify(stats));
                 showAchievementNotification('🚀', 'Первые шаги', 'Выполнено первое задание!');
             }
             
             const currentStreak = parseInt(localStorage.getItem('homeQuestStreak')) || 0;
             if (currentStreak >= 3 && !achievements.streak3) {
                 achievements.streak3 = true;
+                localStorage.setItem('homeQuestStats', JSON.stringify(stats));
                 showAchievementNotification('🔥', 'Постоянство', '3 дня подряд!');
             }
             
             if (currentStreak >= 7 && !achievements.streak7) {
                 achievements.streak7 = true;
+                localStorage.setItem('homeQuestStats', JSON.stringify(stats));
                 showAchievementNotification('🌟', 'Неделя силы воли', '7 дней подряд!');
             }
             
             if (stats.totalPointsEarned >= 100 && !achievements.points100) {
                 achievements.points100 = true;
+                localStorage.setItem('homeQuestStats', JSON.stringify(stats));
                 showAchievementNotification('💰', 'Сотня', 'Накоплено 100 баллов!');
             }
             
             if (stats.totalPointsEarned >= 500 && !achievements.points500) {
                 achievements.points500 = true;
+                localStorage.setItem('homeQuestStats', JSON.stringify(stats));
                 showAchievementNotification('💎', 'Балльный магнат', 'Накоплено 500 баллов!');
             }
             
             const allTasksDone = Object.values(stats.tasksCompleted).every(count => count > 0);
             if (allTasksDone && !achievements.allTasks) {
                 achievements.allTasks = true;
+                localStorage.setItem('homeQuestStats', JSON.stringify(stats));
                 showAchievementNotification('🎯', 'Мастер всех дел', 'Все типы заданий выполнены!');
             }
-            
-            localStorage.setItem('homeQuestStats', JSON.stringify(stats));
         }
         
         function renderStatistics() {
@@ -623,6 +1066,30 @@
                 </div>
             `;
             
+            // Статистика по уровням
+            const currentLevel = calculateLevel(stats.totalPointsEarned);
+            const levelProgress = calculateXPProgress(stats.totalPointsEarned, currentLevel);
+            const nextLevelXP = levelRequirements[currentLevel] - levelRequirements[currentLevel-1];
+            
+            document.getElementById('levelStats').innerHTML = `
+                <div class="stat-item">
+                    <div class="stat-name">🏆 Текущий уровень</div>
+                    <div class="stat-value">${currentLevel}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-name">📈 Всего опыта</div>
+                    <div class="stat-value">${stats.totalXP}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-name">🎯 Прогресс уровня</div>
+                    <div class="stat-value">${levelProgress.currentXP}/${nextLevelXP}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-name">✨ Бонус уровня</div>
+                    <div class="stat-value">+${Math.round((levelBonuses[currentLevel] - 1) * 100)}%</div>
+                </div>
+            `;
+            
             document.getElementById('totalTasksDisplay').textContent = `Всего заданий: ${stats.totalTasksCompleted}`;
             renderAchievements(stats);
         }
@@ -674,7 +1141,7 @@
             showNotification('📊 Статистика экспортирована!\nФайл скачан на ваш компьютер.');
         }
         
-        // ==================== ОСНОВНОЙ КОД ПРИЛОЖЕНИЯ ====================
+        // ==================== ИСПРАВЛЕННЫЙ ОСНОВНОЙ КОД ПРИЛОЖЕНИЯ ====================
         
         let totalPoints = localStorage.getItem('homeQuestPoints') ? 
                          parseInt(localStorage.getItem('homeQuestPoints')) : 0;
@@ -690,8 +1157,10 @@
         function init() {
             initStats();
             updateDisplay();
+            updateLevelDisplay();
+            updateDailyProgress();
             
-            // Проверка серии (как в Duolingo)
+            // ИСПРАВЛЕНИЕ: Правильная проверка серии и нового дня
             if (lastVisit !== today) {
                 if (lastVisit) {
                     const lastDate = new Date(lastVisit);
@@ -713,12 +1182,30 @@
                 localStorage.setItem('homeQuestStreak', streakDays);
                 localStorage.setItem('homeQuestLastVisit', today);
                 
-                // Для нового дня очищаем только выполненные задания за сегодня
-                // Но сохраняем общую статистику
-                if (completedTasks[today]) {
-                    delete completedTasks[today];
-                    localStorage.setItem('completedTasks', JSON.stringify(completedTasks));
+                // ИСПРАВЛЕНИЕ: Не очищаем выполненные задания за сегодня при первом посещении
+                // Только если это новый день и предыдущий день был вчера
+                if (lastVisit && lastVisit !== today) {
+                    // Проверяем, был ли вчерашний день
+                    const yesterday = new Date();
+                    yesterday.setDate(yesterday.getDate() - 1);
+                    const yesterdayStr = yesterday.toISOString().split('T')[0];
+                    
+                    if (lastVisit === yesterdayStr) {
+                        // Сохраняем вчерашние выполненные задания
+                        if (completedTasks[yesterdayStr]) {
+                            // Оставляем их для статистики
+                            // Очищаем только для текущего дня
+                            completedTasks[today] = [];
+                        }
+                    }
                 }
+                
+                // Гарантируем, что для сегодня есть массив
+                if (!completedTasks[today]) {
+                    completedTasks[today] = [];
+                }
+                
+                localStorage.setItem('completedTasks', JSON.stringify(completedTasks));
             }
             
             // Отмечаем уже выполненные задания
@@ -728,30 +1215,39 @@
             renderStatistics();
         }
         
-        // Выполнение задания
+        // Выполнение задания - ИСПРАВЛЕННАЯ ВЕРСИЯ
         function completeTask(points, taskName, element) {
-            // Проверяем, выполнено ли задание сегодня
-            if (completedTasks[today] && completedTasks[today].includes(taskName)) {
+            // ИСПРАВЛЕНИЕ: Проверяем, выполнено ли задание сегодня
+            const todayCompleted = completedTasks[today] || [];
+            if (todayCompleted.includes(taskName)) {
+                console.log('Задание уже выполнено сегодня:', taskName);
                 return;
             }
             
-            // Сохраняем в localStorage
-            totalPoints += points;
+            // Применяем бонус уровня
+            const level = calculateLevel(totalPoints);
+            const bonusMultiplier = levelBonuses[level];
+            const basePoints = points;
+            const bonusPoints = Math.round(basePoints * (bonusMultiplier - 1));
+            const totalPointsEarned = basePoints + bonusPoints;
+            
+            // Сохраняем баллы
+            totalPoints += totalPointsEarned;
             localStorage.setItem('homeQuestPoints', totalPoints);
             
-            // Сохраняем выполненное задание
+            // ИСПРАВЛЕНИЕ: Сохраняем выполненное задание
             if (!completedTasks[today]) {
                 completedTasks[today] = [];
             }
-            completedTasks[today].push(taskName);
-            localStorage.setItem('completedTasks', JSON.stringify(completedTasks));
             
-            // Получаем текущую статистику ДО обновления
-            let stats = JSON.parse(localStorage.getItem('homeQuestStats')) || initStats();
-            const wasFirstTask = stats.totalTasksCompleted === 0;
+            // Проверяем, нет ли уже этого задания
+            if (!completedTasks[today].includes(taskName)) {
+                completedTasks[today].push(taskName);
+                localStorage.setItem('completedTasks', JSON.stringify(completedTasks));
+            }
             
-            // Обновляем статистику
-            stats = updateStats(taskName, points);
+            // Сохраняем статистику
+            saveStats(taskName, totalPointsEarned);
             
             // Анимация
             const pointsElement = document.getElementById('totalPoints');
@@ -762,20 +1258,21 @@
             // Помечаем задание как выполненное
             markTaskAsDone(element, taskName);
             
-            // Показываем уведомление о выполнении задания
-            showNotification(`✅ ${taskName} выполнено!\n+${points} ${formatPoints(points).split(' ')[1]}\nВсего: ${formatPoints(totalPoints)}`);
-            
-            // Если это первое задание - показываем достижение с задержкой
-            if (wasFirstTask) {
-                setTimeout(() => {
-                    showAchievementNotification('🚀', 'Первые шаги', 'Выполнено первое задание!');
-                }, 1000);
+            // Показываем уведомление о выполнении задания с учетом бонуса
+            let notificationMessage = `✅ ${taskName} выполнено!\n+${basePoints} ${formatPoints(basePoints).split(' ')[1]}`;
+            if (bonusPoints > 0) {
+                notificationMessage += ` (+${bonusPoints} бонус уровня!)`;
             }
+            notificationMessage += `\nВсего: ${formatPoints(totalPoints)}`;
+            
+            showNotification(notificationMessage);
             
             // Проверка наград
             checkRewards();
             
             updateDisplay();
+            updateLevelDisplay();
+            updateDailyProgress();
             renderStatistics();
         }
         
@@ -858,6 +1355,7 @@
                 localStorage.removeItem('homeQuestLastVisit');
                 localStorage.removeItem('completedTasks');
                 localStorage.removeItem('homeQuestStats');
+                localStorage.removeItem('lastLevel');
                 
                 // Сбрасываем награды
                 [30, 50, 100].forEach(points => {
@@ -878,6 +1376,8 @@
                 });
                 
                 updateDisplay();
+                updateLevelDisplay();
+                updateDailyProgress();
                 initStats();
                 renderStatistics();
                 showNotification("🔄 Весь прогресс сброшен! Начинаем заново!");
@@ -1068,6 +1568,69 @@
                 console.log("Аудио для достижений недоступно");
                 // Если не удалось создать сложный звук, используем простой
                 playSuccessSound();
+            }
+        }
+        
+        // Звук повышения уровня
+        function playLevelUpSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const now = audioContext.currentTime;
+                
+                // Создаем более эпичный звук для уровня
+                const oscillator1 = audioContext.createOscillator();
+                const oscillator2 = audioContext.createOscillator();
+                const oscillator3 = audioContext.createOscillator();
+                const gainNode1 = audioContext.createGain();
+                const gainNode2 = audioContext.createGain();
+                const gainNode3 = audioContext.createGain();
+                
+                oscillator1.connect(gainNode1);
+                oscillator2.connect(gainNode2);
+                oscillator3.connect(gainNode3);
+                gainNode1.connect(audioContext.destination);
+                gainNode2.connect(audioContext.destination);
+                gainNode3.connect(audioContext.destination);
+                
+                // Первый тон - низкий, мощный
+                oscillator1.frequency.setValueAtTime(261.63, now); // До
+                oscillator1.frequency.exponentialRampToValueAtTime(523.25, now + 0.4); // До на октаву выше
+                oscillator1.type = 'sine';
+                
+                // Второй тон - средний
+                oscillator2.frequency.setValueAtTime(392.00, now); // Соль
+                oscillator2.frequency.exponentialRampToValueAtTime(784.00, now + 0.4); // Соль на октаву выше
+                oscillator2.type = 'triangle';
+                
+                // Третий тон - высокий, блестящий
+                oscillator3.frequency.setValueAtTime(659.25, now); // Ми
+                oscillator3.frequency.exponentialRampToValueAtTime(1318.51, now + 0.4); // Ми на октаву выше
+                oscillator3.type = 'sine';
+                
+                // Управление громкостью
+                gainNode1.gain.setValueAtTime(0, now);
+                gainNode1.gain.linearRampToValueAtTime(0.15, now + 0.1);
+                gainNode1.gain.exponentialRampToValueAtTime(0.01, now + 1.0);
+                
+                gainNode2.gain.setValueAtTime(0, now);
+                gainNode2.gain.linearRampToValueAtTime(0.1, now + 0.15);
+                gainNode2.gain.exponentialRampToValueAtTime(0.01, now + 1.0);
+                
+                gainNode3.gain.setValueAtTime(0, now);
+                gainNode3.gain.linearRampToValueAtTime(0.08, now + 0.2);
+                gainNode3.gain.exponentialRampToValueAtTime(0.01, now + 1.0);
+                
+                // Запуск и остановка
+                oscillator1.start(now);
+                oscillator2.start(now);
+                oscillator3.start(now);
+                oscillator1.stop(now + 1.0);
+                oscillator2.stop(now + 1.0);
+                oscillator3.stop(now + 1.0);
+                
+            } catch (e) {
+                console.log("Аудио для уровня недоступно");
+                playAchievementSound();
             }
         }
         
