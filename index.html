@@ -296,19 +296,228 @@
             background: #4CAF50;
         }
         
-        .rewards {
-            background: #fff9e6;
-            border-radius: 15px;
-            padding: 20px;
-            margin-top: 20px;
-            border: 2px solid #ffd166;
+        /* Стили для наград */
+        .rewards-section {
+            margin-bottom: 20px;
         }
         
-        .reward {
+        .rewards-section h2 {
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .rewards-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+        
+        .reward-item {
+            background: linear-gradient(135deg, #fff9e6, #ffffff);
+            border-radius: 12px;
+            padding: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 2px solid #ffd166;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .reward-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(255, 165, 0, 0.2);
+        }
+        
+        .reward-item.purchased {
+            background: linear-gradient(135deg, #e8f5e9, #ffffff);
+            border-color: #4CAF50;
+            opacity: 0.9;
+        }
+        
+        .reward-item.claimed {
+            background: linear-gradient(135deg, #f0f8ff, #ffffff);
+            border-color: #2575fc;
+            opacity: 0.7;
+        }
+        
+        .reward-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+        }
+        
+        .reward-icon {
+            font-size: 28px;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: white;
+            border-radius: 50%;
+        }
+        
+        .reward-details {
+            flex: 1;
+        }
+        
+        .reward-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #e85d04;
+            margin-bottom: 5px;
+        }
+        
+        .reward-desc {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .reward-price {
+            background: linear-gradient(135deg, #e85d04, #ff6b6b);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .reward-item.purchased .reward-price {
+            background: #4CAF50;
+        }
+        
+        .reward-item.claimed .reward-price {
+            background: #2575fc;
+        }
+        
+        .reward-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-left: 10px;
+        }
+        
+        .reward-btn {
+            background: linear-gradient(135deg, #2575fc, #6a11cb);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        .reward-btn:hover:not(:disabled) {
+            transform: scale(1.05);
+            box-shadow: 0 3px 10px rgba(37, 117, 252, 0.3);
+        }
+        
+        .reward-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .reward-btn.buy-btn {
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+        }
+        
+        .reward-btn.claim-btn {
+            background: linear-gradient(135deg, #FFA726, #FF9800);
+        }
+        
+        .reward-status {
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 5px;
+        }
+        
+        .status-purchased {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .status-claimed {
+            background: #2196F3;
+            color: white;
+        }
+        
+        .purchases-history {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 25px;
+            border: 2px solid #2575fc;
+        }
+        
+        .purchases-history h3 {
+            color: #2575fc;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .purchases-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .purchase-item {
             padding: 12px;
             border-bottom: 1px solid #eee;
             display: flex;
             justify-content: space-between;
+            align-items: center;
+        }
+        
+        .purchase-item:last-child {
+            border-bottom: none;
+        }
+        
+        .purchase-item.claimed {
+            opacity: 0.7;
+        }
+        
+        .purchase-name {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .purchase-date {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .purchase-status {
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-weight: bold;
+        }
+        
+        .shop-status {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #f0f8ff;
+            border-radius: 10px;
+            border: 1px dashed #2575fc;
+        }
+        
+        .shop-status .highlight {
+            color: #e85d04;
+            font-weight: bold;
         }
         
         button {
@@ -417,6 +626,16 @@
         
         .level-up {
             animation: levelUp 0.5s ease;
+        }
+        
+        @keyframes purchaseSuccess {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .purchase-success {
+            animation: purchaseSuccess 0.5s ease;
         }
         
         /* Уведомления - 25 секунд */
@@ -602,24 +821,22 @@
         
         <!-- Экран наград -->
         <div id="rewardsScreen" class="screen">
-            <div class="rewards">
-                <h3 style="color: #e85d04; margin-bottom: 15px;">🎁 Доступные награды:</h3>
-                <div class="reward">
-                    <span>🍿 Вечер кино</span>
-                    <span style="color: #e85d04; font-weight: bold;">50 баллов</span>
+            <div class="rewards-section">
+                <h2>🎁 Ежедневный магазин наград</h2>
+                <div class="shop-status">
+                    Магазин обновляется <span class="highlight">каждый день в 00:00</span><br>
+                    Купленные сегодня награды: <span id="purchasesTodayCount" class="highlight">0</span>
                 </div>
-                <div class="reward">
-                    <span>🎮 +30 мин игры</span>
-                    <span style="color: #e85d04; font-weight: bold;">30 баллов</span>
-                </div>
-                <div class="reward">
-                    <span>🍦 Любимый десерт</span>
-                    <span style="color: #e85d04; font-weight: bold;">40 баллов</span>
-                </div>
-                <div class="reward">
-                    <span>🎪 Поход в парк</span>
-                    <span style="color: #e85d04; font-weight: bold;">100 баллов</span>
-                </div>
+                
+                <div class="rewards-grid" id="rewardsGrid"></div>
+            </div>
+            
+            <div class="purchases-history">
+                <h3>📋 Сегодняшние покупки</h3>
+                <p style="text-align: center; color: #666; font-size: 14px; margin-bottom: 10px;">
+                    Купленные сегодня награды, ожидающие получения
+                </p>
+                <div class="purchases-list" id="purchasesList"></div>
             </div>
             
             <div style="margin-top: 30px; background: #f8f9fa; padding: 20px; border-radius: 15px;">
@@ -870,11 +1087,435 @@
             }
         }
         
-        // ==================== ИСПРАВЛЕННАЯ СИСТЕМА СТАТИСТИКИ ====================
+        // ==================== ИСПРАВЛЕННАЯ СИСТЕМА НАГРАД И ПОКУПОК ====================
+        
+        // Список доступных наград (ежедневный магазин)
+        const rewardsList = [
+            {
+                id: 'movie_night',
+                icon: '🍿',
+                name: 'Вечер кино',
+                description: 'Выбрать фильм для семейного просмотра',
+                price: 70,
+                maxPerDay: 1, // Можно купить только 1 раз в день
+                purchasedToday: false,
+                claimed: false
+            },
+            {
+                id: 'game_time',
+                icon: '🎮',
+                name: '+30 мин игры',
+                description: 'Дополнительное время для компьютерных игр',
+                price: 50,
+                maxPerDay: 2, // Можно купить до 2 раз в день
+                purchasedToday: 0, // Счетчик покупок сегодня
+                claimed: false
+            },
+            {
+                id: 'dessert',
+                icon: '🍦',
+                name: 'Любимый десерт',
+                description: 'Пицца, картошка фри или мороженое на выбор',
+                price: 140,
+                maxPerDay: 1,
+                purchasedToday: false,
+                claimed: false
+            },
+            {
+                id: 'park_visit',
+                icon: '🎪',
+                name: 'Поход в парк/кино',
+                description: 'Семейная прогулка или поход в кинотеатр',
+                price: 200,
+                maxPerDay: 1,
+                purchasedToday: false,
+                claimed: false
+            }
+        ];
+        
+        // История покупок (всех времен)
+        let allPurchasesHistory = JSON.parse(localStorage.getItem('allPurchasesHistory')) || [];
+        
+        // Ежедневные данные о наградах (сбрасываются каждый день)
+        let dailyRewardsData = JSON.parse(localStorage.getItem('dailyRewardsData')) || null;
+        
+        // Загрузка и инициализация данных о наградах
+        function initRewardsData() {
+            const today = new Date().toISOString().split('T')[0];
+            
+            // Загружаем полную историю покупок
+            const savedAllPurchases = JSON.parse(localStorage.getItem('allPurchasesHistory'));
+            if (savedAllPurchases) {
+                allPurchasesHistory = savedAllPurchases;
+            }
+            
+            // Проверяем, нужно ли сбросить ежедневные данные
+            if (dailyRewardsData && dailyRewardsData.date === today) {
+                // Используем сегодняшние данные
+                rewards = dailyRewardsData.rewards;
+                dailyPurchases = dailyRewardsData.dailyPurchases || [];
+            } else {
+                // Создаем новые ежедневные данные
+                resetDailyRewards();
+            }
+            
+            // Загружаем историю покупок за все время
+            loadAllPurchasesHistory();
+        }
+        
+        // Сброс ежедневных данных о наградах
+        function resetDailyRewards() {
+            const today = new Date().toISOString().split('T')[0];
+            
+            // Сбрасываем статусы наград на сегодня
+            rewards = JSON.parse(JSON.stringify(rewardsList));
+            
+            // Сбрасываем ежедневные покупки
+            dailyPurchases = [];
+            
+            // Сохраняем новые ежедневные данные
+            dailyRewardsData = {
+                date: today,
+                rewards: rewards,
+                dailyPurchases: dailyPurchases
+            };
+            
+            localStorage.setItem('dailyRewardsData', JSON.stringify(dailyRewardsData));
+            
+            console.log('Ежедневные награды сброшены на', today);
+        }
+        
+        // Сохранение данных о наградах
+        function saveRewardsData() {
+            const today = new Date().toISOString().split('T')[0];
+            
+            // Обновляем дату в ежедневных данных
+            dailyRewardsData.date = today;
+            dailyRewardsData.rewards = rewards;
+            dailyRewardsData.dailyPurchases = dailyPurchases;
+            
+            // Сохраняем
+            localStorage.setItem('dailyRewardsData', JSON.stringify(dailyRewardsData));
+            localStorage.setItem('allPurchasesHistory', JSON.stringify(allPurchasesHistory));
+        }
+        
+        // Загрузка полной истории покупок
+        function loadAllPurchasesHistory() {
+            const savedAllPurchases = JSON.parse(localStorage.getItem('allPurchasesHistory'));
+            if (savedAllPurchases) {
+                allPurchasesHistory = savedAllPurchases;
+            }
+        }
+        
+        // Получение количества покупок сегодня
+        function getPurchasesTodayCount() {
+            return dailyPurchases.filter(p => !p.claimed).length;
+        }
+        
+        // Рендеринг наград
+        function renderRewards() {
+            const rewardsGrid = document.getElementById('rewardsGrid');
+            if (!rewardsGrid) return;
+            
+            rewardsGrid.innerHTML = '';
+            
+            // Обновляем счетчик покупок сегодня
+            document.getElementById('purchasesTodayCount').textContent = getPurchasesTodayCount();
+            
+            rewards.forEach(reward => {
+                const canAfford = totalPoints >= reward.price;
+                const isPurchasedToday = reward.purchasedToday !== false && 
+                    (reward.purchasedToday === true || reward.purchasedToday >= reward.maxPerDay);
+                const isClaimed = reward.claimed;
+                
+                let statusClass = '';
+                let buttonHTML = '';
+                
+                if (isClaimed) {
+                    statusClass = 'claimed';
+                    buttonHTML = `
+                        <div class="reward-actions">
+                            <div class="reward-status status-claimed">🎉 Получено</div>
+                        </div>
+                    `;
+                } else if (isPurchasedToday) {
+                    statusClass = 'purchased';
+                    const purchaseCount = typeof reward.purchasedToday === 'number' ? reward.purchasedToday : 1;
+                    const remainingPurchases = reward.maxPerDay - purchaseCount;
+                    
+                    if (remainingPurchases > 0) {
+                        // Можно купить еще
+                        buttonHTML = `
+                            <div class="reward-actions">
+                                <button class="reward-btn buy-btn" 
+                                        onclick="buyReward('${reward.id}')"
+                                        ${canAfford ? '' : 'disabled'}>
+                                    Купить еще (${remainingPurchases} осталось)
+                                </button>
+                                <div class="reward-status status-purchased">Куплено: ${purchaseCount}/${reward.maxPerDay}</div>
+                            </div>
+                        `;
+                    } else {
+                        // Достигнут лимит на сегодня
+                        buttonHTML = `
+                            <div class="reward-actions">
+                                <button class="reward-btn claim-btn" onclick="claimReward('${reward.id}')">
+                                    Получить
+                                </button>
+                                <div class="reward-status status-purchased">Лимит на сегодня</div>
+                            </div>
+                        `;
+                    }
+                } else {
+                    // Не куплено сегодня
+                    buttonHTML = `
+                        <div class="reward-actions">
+                            <button class="reward-btn buy-btn" 
+                                    onclick="buyReward('${reward.id}')"
+                                    ${canAfford ? '' : 'disabled'}>
+                                Купить за ${reward.price}
+                            </button>
+                            ${canAfford ? '' : '<div style="font-size: 12px; color: #ff6b6b; margin-top: 5px;">Недостаточно баллов</div>'}
+                            <div style="font-size: 12px; color: #666; margin-top: 5px;">
+                                Можно купить: ${reward.maxPerDay} раз(а) в день
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                const rewardHTML = `
+                    <div class="reward-item ${statusClass}">
+                        <div class="reward-info">
+                            <div class="reward-icon">${reward.icon}</div>
+                            <div class="reward-details">
+                                <div class="reward-name">${reward.name}</div>
+                                <div class="reward-desc">${reward.description}</div>
+                                <div style="font-size: 12px; color: #e85d04; margin-top: 3px;">
+                                    ${reward.maxPerDay > 1 ? `Можно купить до ${reward.maxPerDay} раз в день` : 'Можно купить 1 раз в день'}
+                                </div>
+                            </div>
+                        </div>
+                        ${buttonHTML}
+                    </div>
+                `;
+                
+                rewardsGrid.innerHTML += rewardHTML;
+            });
+            
+            renderPurchasesHistory();
+        }
+        
+        // Рендеринг истории покупок (сегодняшних)
+        function renderPurchasesHistory() {
+            const purchasesList = document.getElementById('purchasesList');
+            if (!purchasesList) return;
+            
+            // Фильтруем только сегодняшние, не полученные награды
+            const todayStr = new Date().toISOString().split('T')[0];
+            const pendingPurchases = dailyPurchases.filter(p => !p.claimed);
+            
+            if (pendingPurchases.length === 0) {
+                purchasesList.innerHTML = `
+                    <div style="text-align: center; padding: 20px; color: #666;">
+                        <div style="font-size: 24px; margin-bottom: 10px;">🎁</div>
+                        <div>Пока нет покупок сегодня</div>
+                        <div style="font-size: 12px; margin-top: 5px;">Купите первую награду!</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            purchasesList.innerHTML = '';
+            
+            pendingPurchases.forEach(purchase => {
+                const purchaseTime = new Date(purchase.timestamp).toLocaleTimeString('ru-RU', { 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                });
+                const reward = rewards.find(r => r.id === purchase.rewardId);
+                
+                if (!reward) return;
+                
+                const purchaseHTML = `
+                    <div class="purchase-item ${purchase.claimed ? 'claimed' : ''}" 
+                         onclick="${!purchase.claimed ? `claimReward('${purchase.rewardId}', ${purchase.index})` : ''}">
+                        <div>
+                            <div class="purchase-name">${reward.icon} ${reward.name}</div>
+                            <div class="purchase-date">Куплено в ${purchaseTime}</div>
+                        </div>
+                        ${!purchase.claimed ? 
+                            `<div class="purchase-status" style="background: #FFA726; color: white; cursor: pointer;">Нажмите, чтобы выдать</div>` :
+                            `<div class="purchase-status" style="background: #4CAF50; color: white;">Выдано</div>`
+                        }
+                    </div>
+                `;
+                
+                purchasesList.innerHTML += purchaseHTML;
+            });
+        }
+        
+        // Покупка награды (с учетом дневных лимитов)
+        function buyReward(rewardId) {
+            const reward = rewards.find(r => r.id === rewardId);
+            
+            if (!reward) {
+                showNotification('❌ Награда не найдена!');
+                return;
+            }
+            
+            // Проверяем дневной лимит
+            const purchasesToday = typeof reward.purchasedToday === 'number' ? reward.purchasedToday : 
+                                 (reward.purchasedToday === true ? 1 : 0);
+            
+            if (purchasesToday >= reward.maxPerDay) {
+                showNotification(`❌ Лимит покупок на сегодня исчерпан!`);
+                return;
+            }
+            
+            if (totalPoints < reward.price) {
+                showNotification(`❌ Недостаточно баллов! Нужно ${reward.price}, а у вас ${totalPoints}`);
+                return;
+            }
+            
+            // Списание баллов
+            totalPoints -= reward.price;
+            localStorage.setItem('homeQuestPoints', totalPoints);
+            
+            // Обновление статуса награды на сегодня
+            if (reward.maxPerDay > 1) {
+                // Для наград с несколькими покупками в день
+                reward.purchasedToday = (reward.purchasedToday || 0) + 1;
+            } else {
+                // Для наград с одной покупкой в день
+                reward.purchasedToday = true;
+            }
+            
+            // Добавление в ежедневные покупки
+            const purchaseIndex = dailyPurchases.length;
+            dailyPurchases.push({
+                rewardId: reward.id,
+                timestamp: new Date().toISOString(),
+                price: reward.price,
+                claimed: false,
+                index: purchaseIndex
+            });
+            
+            // Добавление в полную историю покупок
+            allPurchasesHistory.push({
+                rewardId: reward.id,
+                date: new Date().toISOString().split('T')[0],
+                timestamp: new Date().toISOString(),
+                price: reward.price,
+                claimed: false
+            });
+            
+            // Сохранение данных
+            saveRewardsData();
+            
+            // Обновление отображения
+            updateDisplay();
+            renderRewards();
+            
+            // Показ уведомления
+            const purchaseCount = typeof reward.purchasedToday === 'number' ? reward.purchasedToday : 1;
+            const remainingPurchases = reward.maxPerDay - purchaseCount;
+            
+            let message = `🎉 Поздравляем! Вы купили "${reward.name}"!\nПотрачено: ${reward.price} баллов\nОсталось: ${totalPoints} баллов`;
+            
+            if (remainingPurchases > 0) {
+                message += `\n\nМожно купить еще ${remainingPurchases} раз(а) сегодня!`;
+            } else {
+                message += `\n\nЛимит покупок на сегодня исчерпан!`;
+            }
+            
+            message += `\n\nПокажите это сообщение родителям, чтобы получить награду!`;
+            
+            showNotification(message);
+            
+            // Анимация
+            const pointsElement = document.getElementById('totalPoints');
+            pointsElement.classList.remove('purchase-success');
+            void pointsElement.offsetWidth;
+            pointsElement.classList.add('purchase-success');
+            
+            // Звук покупки
+            playPurchaseSound();
+            
+            // Обновление статистики
+            updatePurchaseStats(reward.price);
+        }
+        
+        // Получение награды (отметка как выданной)
+        function claimReward(rewardId, purchaseIndex = null) {
+            const reward = rewards.find(r => r.id === rewardId);
+            
+            if (!reward) {
+                showNotification('❌ Награда не найдена!');
+                return;
+            }
+            
+            // Находим покупку для отметки
+            let purchaseToClaim;
+            
+            if (purchaseIndex !== null) {
+                // Используем конкретный индекс покупки
+                purchaseToClaim = dailyPurchases[purchaseIndex];
+            } else {
+                // Ищем первую не выданную покупку этой награды
+                purchaseToClaim = dailyPurchases.find(p => p.rewardId === rewardId && !p.claimed);
+            }
+            
+            if (!purchaseToClaim) {
+                showNotification('❌ Не найдена невыданная покупка этой награды!');
+                return;
+            }
+            
+            // Обновление статуса покупки
+            purchaseToClaim.claimed = true;
+            purchaseToClaim.claimTimestamp = new Date().toISOString();
+            
+            // Обновление статуса награды (если все покупки этой награды выданы)
+            const allPurchasesClaimed = dailyPurchases
+                .filter(p => p.rewardId === rewardId)
+                .every(p => p.claimed);
+            
+            if (allPurchasesClaimed) {
+                reward.claimed = true;
+            }
+            
+            // Обновление полной истории покупок
+            const fullPurchase = allPurchasesHistory.find(p => 
+                p.rewardId === rewardId && 
+                p.timestamp === purchaseToClaim.timestamp
+            );
+            
+            if (fullPurchase) {
+                fullPurchase.claimed = true;
+                fullPurchase.claimTimestamp = new Date().toISOString();
+            }
+            
+            // Сохранение данных
+            saveRewardsData();
+            
+            // Обновление отображения
+            renderRewards();
+            
+            // Показ уведомления
+            showNotification(`🎊 Награда "${reward.name}" получена!\n\nНаслаждайтесь заслуженной наградой! 🎉`);
+            
+            // Звук получения награды
+            playClaimSound();
+            
+            // Обновление статистики
+            updateClaimStats();
+        }
+        
+        // ==================== СИСТЕМА СТАТИСТИКИ ====================
         
         const defaultStats = {
             totalTasksCompleted: 0,
             totalPointsEarned: 0,
+            totalPointsSpent: 0,
             tasksCompleted: {
                 'Заправить кровать': 0,
                 'Пропылесосить': 0,
@@ -892,13 +1533,22 @@
                 'streak7': false,
                 'points100': false,
                 'points500': false,
-                'allTasks': false
+                'allTasks': false,
+                'firstPurchase': false,
+                'bigSpender': false,
+                'dailySpender': false,
+                'rewardMaster': false
             },
             dailyStats: {},
             // Статистика по уровням
             highestLevel: 1,
             totalXP: 0,
-            levelHistory: []
+            levelHistory: [],
+            // Статистика по наградам
+            totalRewardsPurchased: 0,
+            totalRewardsClaimed: 0,
+            totalSpentOnRewards: 0,
+            dailyPurchases: 0
         };
         
         function initStats() {
@@ -909,6 +1559,10 @@
                 stats.lastUpdateDate = stats.firstUseDate;
                 localStorage.setItem('homeQuestStats', JSON.stringify(stats));
             }
+            
+            // Загружаем данные о наградах
+            initRewardsData();
+            
             return stats;
         }
         
@@ -1051,7 +1705,85 @@
                         showAchievementNotification('🎯', 'Мастер всех дел', 'Все типы заданий выполнены!');
                     }, 1500);
                 }
+                achievementShown = true;
             }
+            
+            // Достижения для покупок
+            if (stats.totalRewardsPurchased >= 1 && !achievements.firstPurchase) {
+                achievements.firstPurchase = true;
+                localStorage.setItem('homeQuestStats', JSON.stringify(stats));
+                
+                if (!achievementShown) {
+                    setTimeout(() => {
+                        showAchievementNotification('🛒', 'Первая покупка', 'Куплена первая награда!');
+                    }, 1500);
+                }
+                achievementShown = true;
+            }
+            
+            if (stats.totalSpentOnRewards >= 500 && !achievements.bigSpender) {
+                achievements.bigSpender = true;
+                localStorage.setItem('homeQuestStats', JSON.stringify(stats));
+                
+                if (!achievementShown) {
+                    setTimeout(() => {
+                        showAchievementNotification('💸', 'Большой покупатель', 'Потрачено 500 баллов на награды!');
+                    }, 1500);
+                }
+                achievementShown = true;
+            }
+            
+            if (stats.dailyPurchases >= 3 && !achievements.dailySpender) {
+                achievements.dailySpender = true;
+                localStorage.setItem('homeQuestStats', JSON.stringify(stats));
+                
+                if (!achievementShown) {
+                    setTimeout(() => {
+                        showAchievementNotification('🏪', 'Ежедневный покупатель', 'Купил 3 награды за один день!');
+                    }, 1500);
+                }
+                achievementShown = true;
+            }
+            
+            if (stats.totalRewardsClaimed >= 10 && !achievements.rewardMaster) {
+                achievements.rewardMaster = true;
+                localStorage.setItem('homeQuestStats', JSON.stringify(stats));
+                
+                if (!achievementShown) {
+                    setTimeout(() => {
+                        showAchievementNotification('🏆', 'Мастер наград', 'Получено 10 наград!');
+                    }, 1500);
+                }
+            }
+        }
+        
+        // Обновление статистики покупок
+        function updatePurchaseStats(rewardPrice) {
+            let stats = JSON.parse(localStorage.getItem('homeQuestStats'));
+            if (!stats) stats = initStats();
+            
+            stats.totalPointsSpent += rewardPrice;
+            stats.totalRewardsPurchased += 1;
+            stats.totalSpentOnRewards += rewardPrice;
+            stats.dailyPurchases += 1;
+            
+            // Проверяем достижения
+            checkAchievements(stats);
+            
+            localStorage.setItem('homeQuestStats', JSON.stringify(stats));
+        }
+        
+        // Обновление статистики получения наград
+        function updateClaimStats() {
+            let stats = JSON.parse(localStorage.getItem('homeQuestStats'));
+            if (!stats) stats = initStats();
+            
+            stats.totalRewardsClaimed += 1;
+            
+            // Проверяем достижения
+            checkAchievements(stats);
+            
+            localStorage.setItem('homeQuestStats', JSON.stringify(stats));
         }
         
         function renderStatistics() {
@@ -1059,7 +1791,8 @@
             
             const summary = `
                 <div style="margin-bottom: 5px;">Всего заданий: <strong>${stats.totalTasksCompleted}</strong></div>
-                <div style="margin-bottom: 5px;">Всего баллов: <strong>${stats.totalPointsEarned}</strong></div>
+                <div style="margin-bottom: 5px;">Всего баллов заработано: <strong>${stats.totalPointsEarned}</strong></div>
+                <div style="margin-bottom: 5px;">Всего баллов потрачено: <strong>${stats.totalPointsSpent}</strong></div>
                 <div style="margin-bottom: 5px;">Максимальная серия: <strong>${stats.maxStreak} дней</strong></div>
                 <div>Активных дней: <strong>${stats.totalDaysActive}</strong></div>
             `;
@@ -1088,6 +1821,11 @@
             const mostFrequentTask = Object.entries(stats.tasksCompleted)
                 .reduce((a, b) => a[1] > b[1] ? a : b)[0];
             
+            // Статистика по наградам
+            const totalPurchases = allPurchasesHistory.length;
+            const claimedPurchases = allPurchasesHistory.filter(p => p.claimed).length;
+            const totalSpent = allPurchasesHistory.reduce((sum, p) => sum + p.price, 0);
+            
             document.getElementById('additionalStats').innerHTML = `
                 <div class="stat-item">
                     <div class="stat-name">📅 Среднее заданий в день</div>
@@ -1102,8 +1840,20 @@
                     <div class="stat-value">${mostFrequentTask}</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-name">📊 Процент выполнения</div>
-                    <div class="stat-value">${Math.round((stats.totalTasksCompleted / (stats.totalDaysActive * 5)) * 100)}%</div>
+                    <div class="stat-name">🎁 Всего куплено наград</div>
+                    <div class="stat-value">${totalPurchases}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-name">🎊 Всего получено наград</div>
+                    <div class="stat-value">${claimedPurchases}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-name">💸 Потрачено на награды</div>
+                    <div class="stat-value">${totalSpent}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-name">📊 Среднее наград в день</div>
+                    <div class="stat-value">${(totalPurchases / stats.totalDaysActive).toFixed(1)}</div>
                 </div>
             `;
             
@@ -1145,7 +1895,11 @@
                 { key: 'streak7', icon: '🌟', name: 'Неделя силы воли', desc: '7 дней подряд' },
                 { key: 'points100', icon: '💰', name: 'Сотня', desc: 'Накопить 100 баллов' },
                 { key: 'points500', icon: '💎', name: 'Балльный магнат', desc: 'Накопить 500 баллов' },
-                { key: 'allTasks', icon: '🎯', name: 'Мастер всех дел', desc: 'Выполнить все типы заданий' }
+                { key: 'allTasks', icon: '🎯', name: 'Мастер всех дел', desc: 'Выполнить все типы заданий' },
+                { key: 'firstPurchase', icon: '🛒', name: 'Первая покупка', desc: 'Купить первую награду' },
+                { key: 'bigSpender', icon: '💸', name: 'Большой покупатель', desc: 'Потратить 500 баллов на награды' },
+                { key: 'dailySpender', icon: '🏪', name: 'Ежедневный покупатель', desc: 'Купить 3 награды за один день' },
+                { key: 'rewardMaster', icon: '🏆', name: 'Мастер наград', desc: 'Получить 10 наград' }
             ];
             
             achievementList.forEach(ach => {
@@ -1194,12 +1948,17 @@
         // Ключевое изменение: храним выполненные задания отдельно
         let completedTasks = JSON.parse(localStorage.getItem('completedTasks')) || {};
         
+        // Ежедневные покупки
+        let dailyPurchases = [];
+        let rewards = [];
+        
         // Инициализация при загрузке
         function init() {
             initStats();
             updateDisplay();
             updateLevelDisplay();
             updateDailyProgress();
+            renderRewards();
             
             // ИСПРАВЛЕНИЕ: Правильная проверка серии и нового дня
             if (lastVisit !== today) {
@@ -1215,6 +1974,13 @@
                     } else if (diffDays > 1) {
                         streakDays = 1;
                         showNotification('💔 Серия прервана! Начинаем заново.');
+                    }
+                    
+                    // Сброс ежедневного счетчика покупок в статистике
+                    let stats = JSON.parse(localStorage.getItem('homeQuestStats'));
+                    if (stats) {
+                        stats.dailyPurchases = 0;
+                        localStorage.setItem('homeQuestStats', JSON.stringify(stats));
                     }
                 } else {
                     streakDays = 1;
@@ -1314,6 +2080,7 @@
             updateDisplay();
             updateLevelDisplay();
             updateDailyProgress();
+            renderRewards();
             renderStatistics();
         }
         
@@ -1365,30 +2132,34 @@
             });
         }
         
-        // Проверка доступных наград
+        // Проверка доступных наград (старая версия, оставляем для совместимости)
         function checkRewards() {
-            const rewards = [
-                {points: 30, name: "🎮 +30 мин игры", message: "Можешь играть дополнительно 30 минут!"},
-                {points: 50, name: "🍿 Вечер кино", message: "Выбирай фильм на семейный вечер!"},
-                {points: 100, name: "🎪 Поход в парк", message: "Выходные в парке! Покажи родителям это сообщение."}
+            const rewardsOld = [
+                {points: 50, name: "🎮 +30 мин игры", message: "Можешь играть дополнительно 30 минут!"},
+                {points: 70, name: "🍿 Вечер кино", message: "Выбирай фильм на семейный вечер!"},
+                {points: 200, name: "🎪 Поход в парк/кино", message: "Выходные в парке или кино! Покажи родителям это сообщение."}
             ];
             
-            rewards.forEach(reward => {
+            rewardsOld.forEach(reward => {
                 if (totalPoints >= reward.points && 
                     !localStorage.getItem(`reward_${reward.points}_claimed`)) {
                     
-                    showNotification(`🎉 Доступна награда: ${reward.name}\n${reward.message}`);
+                    showNotification(`🎉 Доступна награда: ${reward.name}\n${reward.message}\n\nПерейдите в раздел "🎁 Награды" чтобы купить ее!`);
                     localStorage.setItem(`reward_${reward.points}_claimed`, 'true');
                 }
             });
         }
         
-        // Сброс прогресса
+        // Сброс прогресса (с учетом наград)
         function resetProgress() {
-            if (confirm("Точно сбросить весь прогресс? Это удалит ВСЕ данные, включая статистику!")) {
+            if (confirm("Точно сбросить весь прогресс? Это удалит ВСЕ данные, включая статистику и историю покупок!")) {
                 totalPoints = 0;
                 streakDays = 0;
                 completedTasks = {};
+                rewards = JSON.parse(JSON.stringify(rewardsList)); // Сброс к исходному состоянию
+                dailyPurchases = [];
+                allPurchasesHistory = [];
+                dailyRewardsData = null;
                 
                 // Очищаем все данные
                 localStorage.removeItem('homeQuestPoints');
@@ -1397,9 +2168,11 @@
                 localStorage.removeItem('completedTasks');
                 localStorage.removeItem('homeQuestStats');
                 localStorage.removeItem('lastLevel');
+                localStorage.removeItem('dailyRewardsData');
+                localStorage.removeItem('allPurchasesHistory');
                 
                 // Сбрасываем награды
-                [30, 50, 100].forEach(points => {
+                [50, 70, 200].forEach(points => {
                     localStorage.removeItem(`reward_${points}_claimed`);
                 });
                 
@@ -1420,6 +2193,7 @@
                 updateLevelDisplay();
                 updateDailyProgress();
                 initStats();
+                renderRewards();
                 renderStatistics();
                 showNotification("🔄 Весь прогресс сброшен! Начинаем заново!");
             }
@@ -1441,104 +2215,12 @@
             
             if (screenId === 'statistics') {
                 renderStatistics();
+            } else if (screenId === 'rewards') {
+                renderRewards();
             }
         }
         
-        // Уведомления (имитация Duolingo) - 25 СЕКУНД!
-        function showNotification(message) {
-            const oldNotifications = document.querySelectorAll('.notification');
-            oldNotifications.forEach(n => n.remove());
-            
-            const notification = document.createElement('div');
-            notification.className = 'notification';
-            
-            notification.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
-                    <button onclick="this.parentNode.parentNode.remove()" 
-                            style="background: rgba(0,0,0,0.1); border: none; color: #666; cursor: pointer; font-size: 16px; 
-                                   width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-                                   padding: 0; margin: -5px -5px 0 0; transition: all 0.2s;"
-                            onmouseover="this.style.background='rgba(0,0,0,0.2)'; this.style.color='#333'"
-                            onmouseout="this.style.background='rgba(0,0,0,0.1)'; this.style.color='#666'">
-                        ×
-                    </button>
-                </div>
-                <div style="font-size: 16px; line-height: 1.4; padding-right: 5px;">${message.replace(/\n/g, '<br>')}</div>
-                <div style="margin-top: 12px; display: flex; align-items: center; font-size: 12px; color: #666;">
-                    <div style="flex-grow: 1; height: 4px; background: #e0e0e0; border-radius: 2px; overflow: hidden; margin-right: 10px;">
-                        <div style="height: 100%; width: 100%; background: #4CAF50; animation: progressShrink 25s linear forwards;"></div>
-                    </div>
-                    <span>25 сек</span>
-                </div>
-            `;
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.style.animation = 'slideOut 0.5s ease';
-                    setTimeout(() => {
-                        if (notification.parentNode) {
-                            notification.parentNode.removeChild(notification);
-                        }
-                    }, 500);
-                }
-            }, 25000);
-            
-            playSuccessSound();
-        }
-        
-        // Уведомление о достижении с особенным стилем и звуком
-        function showAchievementNotification(icon, title, message) {
-            const oldNotifications = document.querySelectorAll('.notification');
-            oldNotifications.forEach(n => n.remove());
-            
-            const notification = document.createElement('div');
-            notification.className = 'notification achievement-notification';
-            
-            notification.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
-                    <div style="display: flex; align-items: center;">
-                        <div style="font-size: 24px; margin-right: 10px;" class="notification-icon">${icon}</div>
-                        <div style="font-weight: bold; color: #e85d04; font-size: 18px;">🏆 Достижение!</div>
-                    </div>
-                    <button onclick="this.parentNode.parentNode.remove()" 
-                            style="background: rgba(0,0,0,0.1); border: none; color: #666; cursor: pointer; font-size: 16px; 
-                                   width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-                                   padding: 0; margin: -5px -5px 0 0; transition: all 0.2s;"
-                            onmouseover="this.style.background='rgba(0,0,0,0.2)'; this.style.color='#333'"
-                            onmouseout="this.style.background='rgba(0,0,0,0.1)'; this.style.color='#666'">
-                        ×
-                    </button>
-                </div>
-                <div style="font-size: 16px; line-height: 1.4; padding-right: 5px;">
-                    <div style="font-weight: bold; color: #2575fc; margin-bottom: 5px;">${title}</div>
-                    <div>${message}</div>
-                </div>
-                <div style="margin-top: 12px; display: flex; align-items: center; font-size: 12px; color: #666;">
-                    <div style="flex-grow: 1; height: 4px; background: #e0e0e0; border-radius: 2px; overflow: hidden; margin-right: 10px;">
-                        <div style="height: 100%; width: 100%; background: linear-gradient(90deg, #FFD700, #FFA500); animation: progressShrink 25s linear forwards;"></div>
-                    </div>
-                    <span>25 сек</span>
-                </div>
-            `;
-            
-            document.body.appendChild(notification);
-            
-            // Воспроизводим триумфальный звук для достижений
-            playAchievementSound();
-            
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.style.animation = 'slideOut 0.5s ease';
-                    setTimeout(() => {
-                        if (notification.parentNode) {
-                            notification.parentNode.removeChild(notification);
-                        }
-                    }, 500);
-                }
-            }, 25000);
-        }
+        // ==================== ЗВУКИ ====================
         
         // Звук успеха для обычных заданий
         function playSuccessSound() {
@@ -1675,6 +2357,208 @@
             }
         }
         
+        // Звук покупки
+        function playPurchaseSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const now = audioContext.currentTime;
+                
+                const oscillator1 = audioContext.createOscillator();
+                const oscillator2 = audioContext.createOscillator();
+                const gainNode1 = audioContext.createGain();
+                const gainNode2 = audioContext.createGain();
+                
+                oscillator1.connect(gainNode1);
+                oscillator2.connect(gainNode2);
+                gainNode1.connect(audioContext.destination);
+                gainNode2.connect(audioContext.destination);
+                
+                // Звон монет
+                oscillator1.frequency.setValueAtTime(1046.50, now); // До
+                oscillator1.frequency.exponentialRampToValueAtTime(1318.51, now + 0.2); // Ми
+                oscillator1.type = 'triangle';
+                
+                // Звон кассы
+                oscillator2.frequency.setValueAtTime(783.99, now); // Соль
+                oscillator2.frequency.exponentialRampToValueAtTime(523.25, now + 0.2); // До
+                oscillator2.type = 'sine';
+                
+                // Управление громкостью
+                gainNode1.gain.setValueAtTime(0, now);
+                gainNode1.gain.linearRampToValueAtTime(0.15, now + 0.05);
+                gainNode1.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
+                
+                gainNode2.gain.setValueAtTime(0, now);
+                gainNode2.gain.linearRampToValueAtTime(0.1, now + 0.1);
+                gainNode2.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
+                
+                // Запуск и остановка
+                oscillator1.start(now);
+                oscillator2.start(now);
+                oscillator1.stop(now + 0.6);
+                oscillator2.stop(now + 0.6);
+                
+            } catch (e) {
+                console.log("Аудио покупки недоступно");
+                playSuccessSound();
+            }
+        }
+        
+        // Звук получения награды
+        function playClaimSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const now = audioContext.currentTime;
+                
+                const oscillator1 = audioContext.createOscillator();
+                const oscillator2 = audioContext.createOscillator();
+                const oscillator3 = audioContext.createOscillator();
+                const gainNode1 = audioContext.createGain();
+                const gainNode2 = audioContext.createGain();
+                const gainNode3 = audioContext.createGain();
+                
+                oscillator1.connect(gainNode1);
+                oscillator2.connect(gainNode2);
+                oscillator3.connect(gainNode3);
+                gainNode1.connect(audioContext.destination);
+                gainNode2.connect(audioContext.destination);
+                gainNode3.connect(audioContext.destination);
+                
+                // Торжественный аккорд
+                oscillator1.frequency.setValueAtTime(659.25, now); // Ми
+                oscillator1.type = 'sine';
+                
+                oscillator2.frequency.setValueAtTime(783.99, now); // Соль
+                oscillator2.type = 'sine';
+                
+                oscillator3.frequency.setValueAtTime(987.77, now); // Си
+                oscillator3.type = 'sine';
+                
+                // Управление громкостью
+                gainNode1.gain.setValueAtTime(0, now);
+                gainNode1.gain.linearRampToValueAtTime(0.12, now + 0.1);
+                gainNode1.gain.exponentialRampToValueAtTime(0.01, now + 1.0);
+                
+                gainNode2.gain.setValueAtTime(0, now);
+                gainNode2.gain.linearRampToValueAtTime(0.1, now + 0.15);
+                gainNode2.gain.exponentialRampToValueAtTime(0.01, now + 1.0);
+                
+                gainNode3.gain.setValueAtTime(0, now);
+                gainNode3.gain.linearRampToValueAtTime(0.08, now + 0.2);
+                gainNode3.gain.exponentialRampToValueAtTime(0.01, now + 1.0);
+                
+                // Запуск и остановка
+                oscillator1.start(now);
+                oscillator2.start(now);
+                oscillator3.start(now);
+                oscillator1.stop(now + 1.0);
+                oscillator2.stop(now + 1.0);
+                oscillator3.stop(now + 1.0);
+                
+            } catch (e) {
+                console.log("Аудио получения недоступно");
+                playAchievementSound();
+            }
+        }
+        
+        // ==================== УВЕДОМЛЕНИЯ ====================
+        
+        // Уведомления (имитация Duolingo) - 25 СЕКУНД!
+        function showNotification(message) {
+            const oldNotifications = document.querySelectorAll('.notification');
+            oldNotifications.forEach(n => n.remove());
+            
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            
+            notification.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                    <button onclick="this.parentNode.parentNode.remove()" 
+                            style="background: rgba(0,0,0,0.1); border: none; color: #666; cursor: pointer; font-size: 16px; 
+                                   width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+                                   padding: 0; margin: -5px -5px 0 0; transition: all 0.2s;"
+                            onmouseover="this.style.background='rgba(0,0,0,0.2)'; this.style.color='#333'"
+                            onmouseout="this.style.background='rgba(0,0,0,0.1)'; this.style.color='#666'">
+                        ×
+                    </button>
+                </div>
+                <div style="font-size: 16px; line-height: 1.4; padding-right: 5px;">${message.replace(/\n/g, '<br>')}</div>
+                <div style="margin-top: 12px; display: flex; align-items: center; font-size: 12px; color: #666;">
+                    <div style="flex-grow: 1; height: 4px; background: #e0e0e0; border-radius: 2px; overflow: hidden; margin-right: 10px;">
+                        <div style="height: 100%; width: 100%; background: #4CAF50; animation: progressShrink 25s linear forwards;"></div>
+                    </div>
+                    <span>25 сек</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.style.animation = 'slideOut 0.5s ease';
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.parentNode.removeChild(notification);
+                        }
+                    }, 500);
+                }
+            }, 25000);
+            
+            playSuccessSound();
+        }
+        
+        // Уведомление о достижении с особенным стилем и звуком
+        function showAchievementNotification(icon, title, message) {
+            const oldNotifications = document.querySelectorAll('.notification');
+            oldNotifications.forEach(n => n.remove());
+            
+            const notification = document.createElement('div');
+            notification.className = 'notification achievement-notification';
+            
+            notification.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                    <div style="display: flex; align-items: center;">
+                        <div style="font-size: 24px; margin-right: 10px;" class="notification-icon">${icon}</div>
+                        <div style="font-weight: bold; color: #e85d04; font-size: 18px;">🏆 Достижение!</div>
+                    </div>
+                    <button onclick="this.parentNode.parentNode.remove()" 
+                            style="background: rgba(0,0,0,0.1); border: none; color: #666; cursor: pointer; font-size: 16px; 
+                                   width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+                                   padding: 0; margin: -5px -5px 0 0; transition: all 0.2s;"
+                            onmouseover="this.style.background='rgba(0,0,0,0.2)'; this.style.color='#333'"
+                            onmouseout="this.style.background='rgba(0,0,0,0.1)'; this.style.color='#666'">
+                        ×
+                    </button>
+                </div>
+                <div style="font-size: 16px; line-height: 1.4; padding-right: 5px;">
+                    <div style="font-weight: bold; color: #2575fc; margin-bottom: 5px;">${title}</div>
+                    <div>${message}</div>
+                </div>
+                <div style="margin-top: 12px; display: flex; align-items: center; font-size: 12px; color: #666;">
+                    <div style="flex-grow: 1; height: 4px; background: #e0e0e0; border-radius: 2px; overflow: hidden; margin-right: 10px;">
+                        <div style="height: 100%; width: 100%; background: linear-gradient(90deg, #FFD700, #FFA500); animation: progressShrink 25s linear forwards;"></div>
+                    </div>
+                    <span>25 сек</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Воспроизводим триумфальный звук для достижений
+            playAchievementSound();
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.style.animation = 'slideOut 0.5s ease';
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.parentNode.removeChild(notification);
+                        }
+                    }, 500);
+                }
+            }, 25000);
+        }
+        
         // Запуск при загрузке
         window.onload = function() {
             init();
@@ -1683,6 +2567,7 @@
             setInterval(() => {
                 const newToday = new Date().toISOString().split('T')[0];
                 if (newToday !== today) {
+                    console.log('Новый день! Сбрасываем ежедневные данные...');
                     today = newToday;
                     init();
                 }
